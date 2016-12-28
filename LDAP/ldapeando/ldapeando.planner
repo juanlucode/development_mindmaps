@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<project name="" company="" manager="" phase="" project-start="20101202T000000Z" mrproject-version="2" calendar="1">
+  <properties/>
+  <phases/>
+  <calendars>
+    <day-types>
+      <day-type id="0" name="Jornada laboral" description="Un d&#xED;a de trabajo predeterminado"/>
+      <day-type id="1" name="Jornada de descanso" description="Un d&#xED;a de descanso predeterminado"/>
+      <day-type id="2" name="Usar base" description="Usar d&#xED;a del calendario base"/>
+    </day-types>
+    <calendar id="1" name="Predeterminado">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+  </calendars>
+  <tasks>
+    <task id="1" name="Recopilar Informaci&#xF3;n" note="" work="0" start="20120131T000000Z" end="20120131T000000Z" work-start="20120131T080000Z" percent-complete="0" priority="10" type="milestone" scheduling="fixed-work">
+      <constraint type="must-start-on" time="20120131T000000Z"/>
+    </task>
+  </tasks>
+  <resource-groups/>
+  <resources>
+    <resource id="1" name="wikipedia PAM" short-name="" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="2" name="wikipedia NIS" short-name="" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="3" name="wikipedia &quot;Groupware&quot;" short-name="" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="4" name="DIA Dise&#xF1;ador de diagramas" short-name="DIA" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="5" name="wikipedia OpenId" short-name="wikipediaOpenId" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="6" name="wikipedia Identidad federada" short-name="wikipediaIdentidadFederada" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="7" name="wikipedia kerberos" short-name="wikipediaKerberos" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="8" name="wikipedia autenticacion" short-name="wikipediaAutenticacion" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="9" name="wikipedia single Sign-On" short-name="wikipediaSingleSignOn" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="10" name="wikipedia metadirectorio" short-name="wikipediaMetadirectorio" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="11" name="wikipedia BNF" short-name="wikipediaBNF" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="12" name="wikipedia ASN.1" short-name="wikipediaASN.1" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="13" name="Manuales Modelo" short-name="manualesModelo" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="14" name="Gr&#xE1;ficos" short-name="graficos" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="15" name="Documento OpenOffice del Mapa" short-name="ooMapa" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="16" name="foro LDAP_es" short-name="foroLDAP_es" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="17" name="Manual oficial OpenLDAP" short-name="Manual openLDAP" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="18" name="wikipedia openLDAP" short-name="wikipedia openLDAP" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="19" name="wikipedia LDAP" short-name="wikipedia LDAP" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="20" name="Servicio de directorio.mn" short-name="Mapa Mental" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="21" name="FreeMind" short-name="FreeMind" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="22" name="Introducci&#xF3;n al servicio de directorio" short-name="intro-ldap" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="23" name="Introducci&#xF3;n a openLDAP wbs" short-name="manual wbs" type="2" units="0" email="" note="" std-rate="1" calendar="1"/>
+    <resource id="24" name="wikipedia UUID" short-name="wikipediaUUID" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="25" name="wikipedia Open Software Foundation" short-name="wikipediaOSF" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="26" name="wikipedia OpenLDAP" short-name="wikipediaOpenLDAP" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="27" name="wikipedia Berkeley DB" short-name="wikipediaBerkeleyDB" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="28" name="wikipedia SASL" short-name="wikipediaSASL" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="29" name="wikipedia X.500" short-name="" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="30" name="wikipedia DAP" short-name="" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="31" name="Libro &quot;Herramientas de migraci&#xF3;n de Windows a Linux&quot;" short-name="deWindowsALinux" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="32" name="http://www.slideshare.net/setoide/introduccin-a-open-ldap" short-name="presentacionIntroOpenLDAP" type="2" units="0" email="" note="" std-rate="1"/>
+    <resource id="33" name="http://wiki.canaima.softwarelibre.gob.ve/wiki/index.php/Configurar_la_Replicaci%C3%B3n_maestro-maestro_de_OpenLDAP" short-name="" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="34" name="http://administradores.educarex.es/wiki/index.php/LDAP" short-name="" type="2" units="0" email="" note="" std-rate="0"/>
+    <resource id="35" name="webmin.com" short-name="" type="2" units="0" email="" note="" std-rate="0"/>
+  </resources>
+  <allocations>
+    <allocation task-id="1" resource-id="16" units="1"/>
+    <allocation task-id="1" resource-id="17" units="1"/>
+    <allocation task-id="1" resource-id="18" units="1"/>
+    <allocation task-id="1" resource-id="19" units="1"/>
+    <allocation task-id="1" resource-id="20" units="1"/>
+    <allocation task-id="1" resource-id="21" units="1"/>
+    <allocation task-id="1" resource-id="22" units="1"/>
+    <allocation task-id="1" resource-id="23" units="100"/>
+  </allocations>
+</project>
