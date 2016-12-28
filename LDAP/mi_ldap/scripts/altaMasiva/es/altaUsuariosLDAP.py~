@@ -1,0 +1,104 @@
+#! /usr/bin/env python
+
+# altaUsuariosLDAP
+# CC 2011: Juan Luis Garcia para www.ldapconfig.net 
+# juanluisga@ldapconfig.net
+
+# MODULOS
+#from whrandom import choice
+import csv,random,base64,hashlib,ldap,unicodedata
+
+# FUNCIONES
+def filtrarCaracteresEspeciales(cadena):
+    return ''.join((c for c in unicodedata.normalize('NFD', unicode(cadena,'UTF8')) if unicodedata.category(c) != 'Mn'))
+ 
+def generarPassword(identificador):
+    letrasMin = "abcdefghijklmnopqrstuvwxyz"
+    letrasMay = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    numeros = "1234567890"
+    especiales="!@#$%&=;."
+    secuencia = letrasMin + letrasMay + numeros + especiales
+    cadena = ""
+    for i in range(8):
+       cadena = cadena + random.choice(secuencia)
+    #cadena = identificador.partition(".")[0] + str(random.randint(22,99)) + chr(random.randint(65,90))
+    k = hashlib.sha224(cadena)
+    #k = hashlib.md5(cadena)
+    #k.update(cadena)
+    encriptada = k.digest()
+    encriptada = "{SSHA}" + base64.standard_b64encode(encriptada)
+    #encriptada = "{MD5}" + base64.standard_b64encode(encriptada)
+    #encriptada = "{MD5}" + base64.standard_b64encode(hashlib.md5(cadena).digest)
+    return cadena,encriptada
+    
+def conflictoLDAP(host,base,identificador):
+    directorio = ldap.open(host)
+    directorio.set_option(ldap.OPT_PROTOCOL_VERSION,ldap.VERSION3)
+    result_id = directorio.search(base,ldap.SCOPE_SUBTREE,"uid="+identificador)
+    result_type, result_data = directorio.result(result_id,0)
+    if result_type == ldap.RES_SEARCH_ENTRY:
+        return True
+    else:
+        return False
+    
+        
+# DEFINICION DE PARAMETROS
+rutaFicheros = "./"
+
+servidorLDAP = "dir01.ldapconfig.net"
+uidNumberInicial = 10013
+baseDN = "dc=ldapconfig,dc=net"
+ficheroEntrada = rutaFicheros + "nuevos.csv"
+ficheroLDIF = rutaFicheros + "usuarios.ldif"
+ficheroUsuarios = rutaFicheros + "usuarios.csv"
+ficheroConflictos = rutaFicheros + "usuarios.log"
+
+fEntrada = open(ficheroEntrada,"rb")
+fLDIF = open(ficheroLDIF,"wb")
+fUsuarios = open(ficheroUsuarios,"wb")
+fConflictos = open(ficheroConflictos,"wb")
+
+rEntrada = csv.reader(fEntrada,delimiter=";")
+wUsuarios = csv.writer(fUsuarios,delimiter=";")
+wConflictos = csv.writer(fConflictos,delimiter=";")
+
+uidNumber = uidNumberInicial - 1
+
+wUsuarios.writerow(["APELLIDOS","NOMBRE","UID","PASSWORD"])
+wConflictos.writerow(["UID","MOTIVO"])
+
+
+for index,row in enumerate(rEntrada):
+    nombre = row[0]
+    apellidos = row[1]
+    uid = row[2]
+    departamento = row[3]
+        
+    if (conflictoLDAP(servidorLDAP,baseDN,uid)):
+        wConflictos.writerow([uid,"Ya existe la cuenta"])
+    else:
+        password = generarPassword(uid)
+        uidNumber = uidNumber + 1
+        
+        # ESCRIBE EN EL FICHERO DE USUARIOS
+        wUsuarios.writerow([apellidos,nombre,uid,password[0]])
+                
+        # ESCRIBE EN FICHERO LDIF
+        fLDIF.write("dn: uid=" + uid + ",ou=usuarios,ou=" + departamento + "," + baseDN + "\n")
+        fLDIF.write("objectClass: inetOrgPerson\n")  
+        fLDIF.write("objectClass: posixAccount\n")        
+        fLDIF.write("cn: " + nombre + "\n") 
+        fLDIF.write("sn: " + apellidos + "\n")
+        fLDIF.write("displayName: "+ nombre + " " + apellidos + "\n")
+        fLDIF.write("uid: " + uid + "\n")
+        fLDIF.write("homeDirectory: /home/" + uid + "\n")        
+        fLDIF.write("uidNumber: " + str(uidNumber) + "\n")
+        fLDIF.write("gidNumber:1001\n")
+        fLDIF.write("userPassword: " + password[1] + "\n")
+        fLDIF.write("\n");
+        
+fEntrada.close()
+fLDIF.close()
+fUsuarios.close()
+fConflictos.close()   
+

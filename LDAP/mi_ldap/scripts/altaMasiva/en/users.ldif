@@ -1,0 +1,48 @@
+dn: uid=richard.moore,ou=usuarios,ou=trade,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Richard
+sn: Moore
+displayName: Richard Moore
+uid: richard.moore
+homeDirectory: /home/richard.moore
+uidNumber: 10013
+gidNumber:1001
+userPassword: {MD5}RpeUB6QZEb/zgTclSZPe+Q==
+
+dn: uid=susan.taylor,ou=usuarios,ou=trade,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Susan
+sn: Taylor
+displayName: Susan Taylor
+uid: susan.taylor
+homeDirectory: /home/susan.taylor
+uidNumber: 10014
+gidNumber:1001
+userPassword: {MD5}WM3psaNEOZr6Vx3skU69sA==
+
+dn: uid=joseph.thomas,ou=usuarios,ou=tech,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Joseph
+sn: Thomas
+displayName: Joseph Thomas
+uid: joseph.thomas
+homeDirectory: /home/joseph.thomas
+uidNumber: 10015
+gidNumber:1001
+userPassword: {MD5}G4905vrtRV272GG5erpekw==
+
+dn: uid=margaret.jackson,ou=usuarios,ou=tech,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Margaret
+sn: Jackson
+displayName: Margaret Jackson
+uid: margaret.jackson
+homeDirectory: /home/margaret.jackson
+uidNumber: 10016
+gidNumber:1001
+userPassword: {MD5}E3FaUWfPtw9v3/LyDKnUcA==
+

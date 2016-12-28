@@ -1,0 +1,478 @@
+dn: dc=directorio,dc=com
+objectClass: dcObject
+objectClass: organization
+dc: directorio
+o: directorio
+structuralObjectClass: organization
+entryUUID: 1dfd36fe-e5ae-102f-8c3e-d156585b20e0
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110318131937Z
+entryCSN: 20110318131937.060447Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110318131937Z
+
+dn: ou=gerencia,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: gerencia
+description: Departamento de Gerencia
+structuralObjectClass: organizationalUnit
+entryUUID: 84b9eb6c-e8d8-102f-9f72-137ee26af03d
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110322140041Z
+entryCSN: 20110322140041.775762Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110322140041Z
+
+dn: ou=usuarios,ou=gerencia,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: usuarios
+description: Usuarios de Gerencia
+structuralObjectClass: organizationalUnit
+entryUUID: 84f4f0d6-e8d8-102f-9f73-137ee26af03d
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110322140042Z
+entryCSN: 20110322140042.162564Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110322140042Z
+
+dn: uid=alonso.alvarez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Alonso
+sn:: w4FsdmFyZXogU29yaWE=
+displayName:: QWxvbnNvIMOBbHZhcmV6
+gidNumber: 1001
+homeDirectory: /home/alonso.alvarez
+uid: alonso.alvarez
+uidNumber: 10001
+structuralObjectClass: inetOrgPerson
+entryUUID: 9747d75e-e990-102f-87eb-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323115820Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.297945Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: uid=leonor.meneses,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Leonor
+sn: Meneses Noronha
+displayName: Leonor Meneses
+gidNumber: 1001
+homeDirectory: /home/leonor.meneses
+uid: leonor.meneses
+uidNumber: 10002
+structuralObjectClass: inetOrgPerson
+entryUUID: 974b5e92-e990-102f-87ec-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323115820Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.301411Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: uid=juan.antolinez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Juan
+sn: Antolinez Burgos
+displayName: Juan Antolinez
+gidNumber: 1001
+homeDirectory: /home/juan.antolinez
+uid: juan.antolinez
+uidNumber: 10003
+structuralObjectClass: inetOrgPerson
+entryUUID: 974e192a-e990-102f-87ed-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323115820Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.382758Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: ou=grupos,ou=gerencia,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: grupos
+description: Grupos de Gerencia
+structuralObjectClass: organizationalUnit
+entryUUID: 9767e7b0-e990-102f-87ef-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323115820Z
+entryCSN: 20110323115820.513230Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110323115820Z
+
+dn: cn=directivos,ou=grupos,ou=gerencia,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+cn: directivos
+uniqueMember: uid=leonor.meneses,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+structuralObjectClass: groupOfUniqueNames
+entryUUID: 044a0a28-e993-102f-87f0-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+entryCSN: 20110325111555.379071Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110325111555Z
+
+dn: cn=secretarios,ou=grupos,ou=gerencia,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+cn: secretarios
+uniqueMember: uid=juan.antolinez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+uniqueMember: uid=margarita.nelken,ou=usuarios,ou=gerencia,dc=directorio,dc=co
+ m
+uniqueMember: uid=alonso.alvarez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+structuralObjectClass: groupOfUniqueNames
+entryUUID: 044aed1c-e993-102f-87f1-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+entryCSN: 20110325111555.382977Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110325111555Z
+
+dn: ou=comercial,dc=directorio,dc=com
+objectClass: organizationalUnit
+description: Departamento Comercial
+structuralObjectClass: organizationalUnit
+entryUUID: 0467fb82-e993-102f-87f2-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+ou: comercial
+entryCSN: 20110407124416.156563Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110407124416Z
+
+dn: ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: usuarios
+description: Usuarios del Departamento Comercial
+structuralObjectClass: organizationalUnit
+entryUUID: 046beee0-e993-102f-87f3-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+entryCSN: 20110323121542.404722Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110323121542Z
+
+dn: uid=gonzalo.argote,ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Gonzalo
+sn: Argote Molina
+displayName: Gonzalo Argote
+gidNumber: 1001
+homeDirectory: /home/gonzalo.argote
+uid: gonzalo.argote
+uidNumber: 10005
+structuralObjectClass: inetOrgPerson
+entryUUID: 046fb3a4-e993-102f-87f4-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.499804Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: uid=sofia.perez,ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn:: U29mw61h
+sn:: UMOpcmV6IENhc2Fub3ZhIGRlIEx1dG9zbGF3c2tp
+displayName:: U29mw61hIFDDqXJleg==
+gidNumber: 1001
+homeDirectory: /home/sofia.perez
+uid: sofia.perez
+uidNumber: 10006
+structuralObjectClass: inetOrgPerson
+entryUUID: 0472d4f8-e993-102f-87f5-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.524912Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: uid=benito.arias,ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Benito
+sn: Arias Montano
+displayName: Benito Arias
+gidNumber: 1001
+homeDirectory: /home/benito.arias
+uid: benito.arias
+uidNumber: 10007
+structuralObjectClass: inetOrgPerson
+entryUUID: 04760498-e993-102f-87f6-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.544875Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: uid=anamaria.matute,ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn:: QW5hIE1hcsOtYQ==
+displayName:: QW5hIE1hcsOtYSBNYXR1dGU=
+gidNumber: 1001
+homeDirectory: /home/anamaria.matute
+uid: anamaria.matute
+uidNumber: 10008
+structuralObjectClass: inetOrgPerson
+entryUUID: 047a0ce6-e993-102f-87f7-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+sn: Matute Ausejo
+mail: anamaria.matute2@directorio.com
+entryCSN: 20110418095644.860181Z#000000#000#000000
+modifiersName: uid=juan.antolinez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+modifyTimestamp: 20110418095644Z
+
+dn: ou=grupos,ou=comercial,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: grupos
+description: Grupos del Departamento Comercial
+structuralObjectClass: organizationalUnit
+entryUUID: 047d7e1c-e993-102f-87f8-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+entryCSN: 20110323121542.519818Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110323121542Z
+
+dn: ou=tecnico,dc=directorio,dc=com
+objectClass: organizationalUnit
+description: Departamento  Tecnico
+structuralObjectClass: organizationalUnit
+entryUUID: 048e7abe-e993-102f-87f9-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+ou: tecnico
+entryCSN: 20110407124404.368068Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110407124404Z
+
+dn: ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: usuarios
+description: Usuarios del Departamento  Tecnico
+structuralObjectClass: organizationalUnit
+entryUUID: 0493eed6-e993-102f-87fa-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+entryCSN: 20110323121542.666884Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110323121542Z
+
+dn: uid=luis.barahona,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Luis
+sn: Barahona Soto
+displayName: Luis Barahona
+gidNumber: 1001
+homeDirectory: /home/luis.barahona
+uid: luis.barahona
+uidNumber: 10009
+structuralObjectClass: inetOrgPerson
+entryUUID: 04978596-e993-102f-87fb-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.587249Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: uid=rosa.chacel,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Rosa
+sn: Chacel Arimon
+displayName: Rosa Chacel
+gidNumber: 1001
+homeDirectory: /home/rosa.chacel
+uid: rosa.chacel
+uidNumber: 10010
+structuralObjectClass: inetOrgPerson
+entryUUID: 04a16a66-e993-102f-87fc-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.614147Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn:: QmFydG9sb23DqQ==
+sn: Cairasco
+displayName:: QmFydG9sb23DqSBDYWlyYXNjbw==
+gidNumber: 1001
+homeDirectory: /home/bartolome.cairasco
+uid: bartolome.cairasco
+uidNumber: 10011
+structuralObjectClass: inetOrgPerson
+entryUUID: 04a6ccc2-e993-102f-87fd-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.638735Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: uid=julia.asensi,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Julia
+sn: de Asensi y Laiglesia
+displayName: Julia de Asensi
+gidNumber: 1001
+homeDirectory: /home/julia.asensi
+uid: julia.asensi
+uidNumber: 10012
+structuralObjectClass: inetOrgPerson
+entryUUID: 04aabe0e-e993-102f-87fe-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+userPassword:: e1NTSEF9cDg5WnFTODR5MW1Celp3MGY5bUhLRk91VUhkYzloMXY=
+entryCSN: 20110324125520.662391Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110324125520Z
+
+dn: ou=grupos,ou=tecnico,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: grupos
+description: Grupos del Departamento  Tecnico
+structuralObjectClass: organizationalUnit
+entryUUID: 04aec1b6-e993-102f-87ff-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+entryCSN: 20110323121542.842677Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110323121542Z
+
+dn: cn=administradores,ou=grupos,ou=tecnico,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+cn: administradores
+structuralObjectClass: groupOfUniqueNames
+entryUUID: 04b24c8c-e993-102f-8800-5b76b25fe5af
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110323121542Z
+uniqueMember: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=c
+ om
+entryCSN: 20110325111555.332829Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110325111555Z
+
+dn: uid=ramon.jarralde,ou=usuarios,ou=comercial,dc=directorio,dc=com
+displayName:: UmFtw7NuIEphcnJhbGRl
+uid: ramon.jarralde
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: person
+objectClass: posixAccount
+userPassword:: e1NTSEF9cjEvWmMrbDhuM25Nd1R3a0NjVFVZWWppaXIxVVkxWnJORWhtTUUxNVd
+ WQkJWMFZa
+uidNumber: 10013
+gidNumber: 1001
+sn:: SmFycmFsZGUgUMOpcmV6
+homeDirectory: /home/ramon.jarralde
+cn:: UmFtw7Nu
+structuralObjectClass: inetOrgPerson
+entryUUID: 0891ec84-ed78-102f-885b-897807fc51df
+creatorsName: cn=Manager,dc=directorio,dc=com
+createTimestamp: 20110328111237Z
+entryCSN: 20110328111237.604012Z#000000#000#000000
+modifiersName: cn=Manager,dc=directorio,dc=com
+modifyTimestamp: 20110328111237Z
+
+dn: ou=corporativo,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: corporativo
+description: Elementos corporativos
+structuralObjectClass: organizationalUnit
+entryUUID: 08af1266-fdf7-102f-96cc-9b9b4a1470cc
+creatorsName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=c
+ om
+createTimestamp: 20110418110202Z
+entryCSN: 20110418110202.484141Z#000000#000#000000
+modifiersName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=
+ com
+modifyTimestamp: 20110418110202Z
+
+dn: cn=bajas,ou=corporativo,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+uniqueMember: uid=julia.asensi,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+cn: bajas
+structuralObjectClass: groupOfUniqueNames
+entryUUID: a77b98ba-fdf7-102f-96cd-9b9b4a1470cc
+creatorsName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=c
+ om
+createTimestamp: 20110418110628Z
+entryCSN: 20110418110628.904525Z#000000#000#000000
+modifiersName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=
+ com
+modifyTimestamp: 20110418110628Z
+
+dn: ou=social,ou=corporativo,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: social
+description: Grupos sociales
+structuralObjectClass: organizationalUnit
+entryUUID: c6ddba5c-fdf8-102f-96cf-9b9b4a1470cc
+creatorsName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=c
+ om
+createTimestamp: 20110418111431Z
+entryCSN: 20110418111431.053742Z#000000#000#000000
+modifiersName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=
+ com
+modifyTimestamp: 20110418111431Z
+
+dn: cn=club_deportivo,ou=social,ou=corporativo,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+uniqueMember: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=c
+ om
+cn: club_deportivo
+structuralObjectClass: groupOfUniqueNames
+entryUUID: 1a3e558a-fdf9-102f-96d0-9b9b4a1470cc
+creatorsName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=c
+ om
+createTimestamp: 20110418111650Z
+entryCSN: 20110418111650.937761Z#000000#000#000000
+modifiersName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=
+ com
+modifyTimestamp: 20110418111650Z
+
+dn: cn=club_cultural,ou=social,ou=corporativo,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+uniqueMember: uid=benito.arias,ou=usuarios,ou=comercial,dc=directorio,dc=com
+cn: club_cultural
+structuralObjectClass: groupOfUniqueNames
+entryUUID: 5a8a9a7c-fdf9-102f-96d1-9b9b4a1470cc
+creatorsName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=c
+ om
+createTimestamp: 20110418111838Z
+entryCSN: 20110418111838.811772Z#000000#000#000000
+modifiersName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=
+ com
+modifyTimestamp: 20110418111838Z
+
+dn: cn=celebraciones,ou=social,ou=corporativo,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+uniqueMember: uid=leonor.meneses,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+cn: celebraciones
+structuralObjectClass: groupOfUniqueNames
+entryUUID: 923f4508-fdf9-102f-96d2-9b9b4a1470cc
+creatorsName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=c
+ om
+createTimestamp: 20110418112012Z
+entryCSN: 20110418112012.270474Z#000000#000#000000
+modifiersName: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=
+ com
+modifyTimestamp: 20110418112012Z
+

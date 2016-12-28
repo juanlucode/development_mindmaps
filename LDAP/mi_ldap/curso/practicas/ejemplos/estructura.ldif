@@ -1,0 +1,203 @@
+# Departamento de Gerencia
+dn: ou=gerencia,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: gerencia
+description: Departamento de Gerencia
+
+# Usuarios de Gerencia
+dn: ou=usuarios,ou=gerencia,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: usuarios
+description: Usuarios de Gerencia
+
+dn: uid=alonso.alvarez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Alonso
+sn: Álvarez Soria
+displayName: Alonso Álvarez
+gidNumber: 1001
+homeDirectory: /home/alonso.alvarez
+uid: alonso.alvarez
+uidNumber: 10001
+
+dn: uid=leonor.meneses,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Leonor
+sn: Meneses Noronha
+displayName: Leonor Meneses
+gidNumber: 1001
+homeDirectory: /home/leonor.meneses
+uid: leonor.meneses
+uidNumber: 10002
+
+dn: uid=juan.antolinez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Juan
+sn: Antolinez Burgos
+displayName: Juan Antolinez
+gidNumber: 1001
+homeDirectory: /home/juan.antolinez
+uid: juan.antolinez
+uidNumber: 10003
+
+dn: uid=margarita.nelken,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Margarita
+sn: Nelken Mansberger
+displayName: Margarita Nelken
+gidNumber: 1001
+homeDirectory: /home/margarita.nelken
+uid: margarita.nelken
+uidNumber: 10004
+
+# Grupos de Gerencia
+dn: ou=grupos,ou=gerencia,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: grupos
+description: Grupos de Gerencia
+
+dn: cn=directivos,ou=grupos,ou=gerencia,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+cn: directivos
+uniqueMember: uid=alonso.alvarez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+uniqueMember: uid=leonor.meneses,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+
+dn: cn=secretarios,ou=grupos,ou=gerencia,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+cn: secretarios
+uniqueMember: uid=juan.antolinez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+uniqueMember: uid=margarita.nelken,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+
+# Departamento Comercial
+dn: ou=comercial,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: gerencia
+description: Departamento Comercial
+
+# Usuarios del Departamento Comercial
+dn: ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: usuarios
+description: Usuarios del Departamento Comercial
+
+dn: uid=gonzalo.argote,ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Gonzalo
+sn: Argote Molina
+displayName: Gonzalo Argote
+gidNumber: 1001
+homeDirectory: /home/gonzalo.argote
+uid: gonzalo.argote
+uidNumber: 10005
+
+dn: uid=sofia.perez,ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Sofía
+sn: Pérez Casanova de Lutoslawski
+displayName: Sofía Pérez
+gidNumber: 1001
+homeDirectory: /home/sofia.perez
+uid: sofia.perez
+uidNumber: 10006
+
+dn: uid=benito.arias,ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Benito
+sn: Arias Montano
+displayName: Benito Arias
+gidNumber: 1001
+homeDirectory: /home/benito.arias
+uid: benito.arias
+uidNumber: 10007
+
+dn: uid=anamaria.matute,ou=usuarios,ou=comercial,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Ana María
+sn: Matute Ausejo
+displayName: Ana María Matute
+gidNumber: 1001
+homeDirectory: /home/anamaria.matute
+uid: anamaria.matute
+uidNumber: 10008
+
+# Grupos del Departamento Comercial
+dn: ou=grupos,ou=comercial,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: grupos
+description: Grupos del Departamento Comercial
+
+
+# Departamento Tecnico
+dn: ou=tecnico,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: gerencia
+description: Departamento  Tecnico
+
+# Usuarios del Departamento  tecnico
+dn: ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: usuarios
+description: Usuarios del Departamento  Tecnico
+
+dn: uid=luis.barahona,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Luis
+sn: Barahona Soto
+displayName: Luis Barahona
+gidNumber: 1001
+homeDirectory: /home/luis.barahona
+uid: luis.barahona
+uidNumber: 10009
+
+dn: uid=rosa.chacel,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Rosa
+sn: Chacel Arimon
+displayName: Rosa Chacel
+gidNumber: 1001
+homeDirectory: /home/rosa.chacel
+uid: rosa.chacel
+uidNumber: 10010
+
+dn: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Bartolomé
+sn: Cairasco
+displayName: Bartolomé Cairasco
+gidNumber: 1001
+homeDirectory: /home/bartolome.cairasco
+uid: bartolome.cairasco
+uidNumber: 10011
+
+dn: uid=julia.asensi,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Julia
+sn: de Asensi y Laiglesia
+displayName: Julia de Asensi
+gidNumber: 1001
+homeDirectory: /home/julia.asensi
+uid: julia.asensi
+uidNumber: 10012
+
+# Grupos del Departamento  Tecnico
+dn: ou=grupos,ou=tecnico,dc=directorio,dc=com
+objectClass: organizationalUnit
+ou: grupos
+description: Grupos del Departamento  Tecnico
+
+dn: cn=administradores,ou=grupos,ou=tecnico,dc=directorio,dc=com
+objectClass: groupOfUniqueNames
+cn: administradores
+uniqueMember: uid=julia.asensi,ou=usuarios,ou=tecnico,dc=directorio,dc=com

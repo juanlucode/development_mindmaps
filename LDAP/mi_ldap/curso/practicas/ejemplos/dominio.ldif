@@ -1,0 +1,6 @@
+# Componente de dominio
+dn: dc=directorio,dc=com
+objectClass: dcObject
+objectClass: organization
+dc: directorio
+o: directorio

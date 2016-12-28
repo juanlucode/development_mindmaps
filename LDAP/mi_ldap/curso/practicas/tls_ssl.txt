@@ -1,0 +1,77 @@
+ACTIVACIÓN SSL/TLS OpenLDAP
+==============================
+
+aptitude install openssl
+mkdir /var/myca
+cd /var/myca
+/usr/lib/ssl/misc/CA.sh -newca
+	CA certificate filename (or enter to create): <ENTER>
+	Making CA certificate...
+	Generating a 1024 bit RSA private key
+	...
+	...
+	Writing new private key to './demoCA/private/./cakey.pem'
+	Enter PEM pass phrase: secretoCA
+	Country Name: ES
+	State or Province Name: Badajoz
+	Locality Name: Merida
+	Organization Name: Juan Luis Garcia
+	Organizational Unit Name: cursoOpenLDAP
+	Common Name: ldap-coach
+	Email Address: <ENTER>
+	Please enter the following 'extra' attributes to be sent with your certificate request
+	A challenge password: <ENTER>
+	An optional company name: <ENTER>
+
+	Using configuration from/usr/lib/ssl/openssl.cnf
+	Enter pass phrase for ./demoCA/private/./cakey.pem: secretoCA
+
+	Write out database with 1 new entries
+	Data Base Updated
+openssl req -new -nodes -keyout newreq.pem -out newreq.pem
+	Generating a 1024 bit RSA private key
+	...
+	...
+	Writing new private key to 'newreq.pem'
+	------
+	You are about to be asked to enter information that will be incorporated into your certificate request.
+	What you are about to enter is what is called a Distinguished Name or DN.
+	There are quite a few fields but you can leave some blank
+	For some fields there will be a default value, 
+	If you enter '.', the field will be left blank.
+	------
+
+	Country Name: ES
+	State or Province Name: Badajoz
+	Locality Name: Merida
+	Organization Name: Juan Luis Garcia
+	Organizational Unit Name: cursoOpenLDAP
+	Common Name: ldap-coach
+	Email Address: <ENTER>
+	Please enter the following 'extra' attributes to be sent with your certificate request.
+	A challenge password: <ENTER>
+	An optional company name: <ENTER>
+/usr/lib/ssl/misc/CA.sh -sign
+	Using configuration from /usr/lib/ssl/openssl.cnf
+	Enter pass phrase for ./demoCA/private/cakey.pem: secretoCA
+
+	Certificate is to be certified until Jun 14 13:04:44 2012 GMT (365 days)
+	Sign the certificate? [y/n]: y
+	1 out of 1 certificate requests certified, commit?[y/n]: y
+	...
+	... (certificado)
+	...
+	Signed certificate is in newcert.pem
+cp /var/myca/demoCA/cacert.pem /usr/local/etc/openldap/
+mv /var/myca/newcert.pem /usr/local/etc/openldap/servercrt.pem
+mv /var/myca/newreq.pem /usr/local/etc/openldap/serverkey.pem
+chmod 600 /usr/local/etc/openldap/serverkey.pem
+cp /var/myca/demoCA/cacert.pem /media/sf_compartida/ldap-coach.pem
+
+Editamos el fichero slapd.conf añadiendo las siguientes líneas
+	TLSCACertificateFile /usr/local/etc/openldap/cacert.pem
+	TLSCertificateFile /usr/local/etc/openldap/servercrt.pem
+	TLSCertificateKeyFile /usr/local/etc/openldap/serverkey.pem
+	TLSVerifyClient never
+
+

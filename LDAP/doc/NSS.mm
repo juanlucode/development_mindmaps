@@ -1,0 +1,68 @@
+<map version="0.9.0">
+<!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
+<node BACKGROUND_COLOR="#19dbed" COLOR="#ed193d" CREATED="1338794552576" ID="ID_1376755871" MODIFIED="1338795341708" TEXT="NSS">
+<edge STYLE="sharp_bezier" WIDTH="8"/>
+<font BOLD="true" NAME="SansSerif" SIZE="28"/>
+<node BACKGROUND_COLOR="#fbf307" COLOR="#074afb" CREATED="1338794570288" HGAP="52" ID="ID_1874362757" MODIFIED="1338794656053" POSITION="right" STYLE="bubble" TEXT="Name Service Switch" VSHIFT="-233">
+<edge COLOR="#0421fc"/>
+<font BOLD="true" NAME="SansSerif" SIZE="28"/>
+</node>
+<node COLOR="#fc04e6" CREATED="1338794658984" ID="ID_113314816" MODIFIED="1338795252926" POSITION="right" TEXT="FUNCI&#xd3;N">
+<edge COLOR="#f510dd"/>
+<font BOLD="true" NAME="SansSerif" SIZE="24"/>
+<node CREATED="1338794667864" ID="ID_1879583894" MODIFIED="1338795226308" TEXT="Resoluci&#xf3;n de nombres">
+<edge WIDTH="2"/>
+<font NAME="SansSerif" SIZE="18"/>
+<node CREATED="1338794677896" ID="ID_380727892" MODIFIED="1338794682492" TEXT="usuarios">
+<node CREATED="1338794684392" ID="ID_1926238860" MODIFIED="1338794687381" TEXT="passwd"/>
+<node CREATED="1338794687904" ID="ID_42201366" MODIFIED="1338794689725" TEXT="shadow"/>
+</node>
+<node CREATED="1338794692088" ID="ID_1002402576" MODIFIED="1338794695897" TEXT="grupos">
+<node CREATED="1338794695898" ID="ID_1249810815" MODIFIED="1338794697597" TEXT="group"/>
+</node>
+<node CREATED="1338794699752" ID="ID_645131139" MODIFIED="1338794702029" TEXT="hosts"/>
+</node>
+<node CREATED="1338794724152" ID="ID_524920072" MODIFIED="1338795226309" TEXT="FUENTES">
+<edge WIDTH="2"/>
+<font NAME="SansSerif" SIZE="18"/>
+<node CREATED="1338794728832" ID="ID_1196972443" MODIFIED="1338794734438" TEXT="Archivos locales"/>
+<node CREATED="1338794735768" ID="ID_1185363265" MODIFIED="1338794738702" TEXT="LDAP"/>
+<node CREATED="1338794739728" ID="ID_1078996713" MODIFIED="1338794750974" TEXT="NIS / NIS +"/>
+<node CREATED="1338794751488" ID="ID_1002244434" MODIFIED="1338794757258" TEXT="Bases de datos">
+<node CREATED="1338794757259" ID="ID_370524317" MODIFIED="1338794763494" TEXT="MySQL"/>
+<node CREATED="1338794764008" ID="ID_579164890" MODIFIED="1338794776918" TEXT="PostgreSQL"/>
+</node>
+</node>
+</node>
+<node COLOR="#269539" CREATED="1338795117400" ID="ID_667723660" MODIFIED="1338795287190" POSITION="right" TEXT="CONFIG">
+<edge COLOR="#14a50c" WIDTH="4"/>
+<font BOLD="true" NAME="SansSerif" SIZE="24"/>
+<node COLOR="#0994fd" CREATED="1338809330828" ID="ID_1051057932" MODIFIED="1338809388656" TEXT="/etc/nsswitch.conf">
+<font BOLD="true" NAME="SansSerif" SIZE="18"/>
+<node BACKGROUND_COLOR="#f9e9a5" COLOR="#1943ed" CREATED="1338795130584" ID="ID_906493903" MODIFIED="1338795317659">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      passwd: ldap files
+    </p>
+    <p>
+      shadow: ldap files
+    </p>
+    <p>
+      group: ldap files
+    </p>
+    <p>
+      hosts: ldap files
+    </p>
+  </body>
+</html></richcontent>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1338795166632" ID="ID_1661046314" MODIFIED="1338795174572" TEXT="El orden es relevante"/>
+</node>
+</node>
+</node>
+</map>

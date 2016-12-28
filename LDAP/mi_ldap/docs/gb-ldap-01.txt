@@ -1,0 +1,1555 @@
+**********************************************************************
+Título:   Guía Básica sobre la Gestión del Servicio de Directorio
+Versión:  20010521
+Autor:    Comité de Migración
+          AL - Alfonso López Murcia - UM
+          CM - Chelo Malagón - RedIRIS
+          DL - Diego R. López - RedIRIS 
+          FS - Félix Sánchez Gómez - CICA
+          JM - Javier Masa Marín - RedIRIS
+Colaboración:
+          JD - Javier Domínguez - PTYOC RedIRIS
+Localización: http://www.rediris.es/ldap/doc/gb/gb-ldap.txt
+**********************************************************************
+
+Uno de los objetivos del comité de migración del Directorio, dentro del
+grupo de trabajo iris-dir, es la elaboración de una documentación que 
+ayude a la instalación y gestión de un Servicio de Directorio en un 
+centro, así como la integración del mismo en el Directorio nacional.
+
+Presentamos aquí una versión beta de lo que se ha recopilado en las 
+reuniones del comité de migración. Este "guiaburros" o guía básica
+está en proceso de actualización permanente y en él se irán incluyendo 
+todos los temas que sean de interés para el grupo iris-ldap. El orden 
+de los puntos puede ser modificado para adaptarse a los diferentes 
+capítulos que se vayan incluyendo en un futuro.
+
+Si alguien quiere comentar cualquier cuestión sobre está guía o 
+incorporar imás información no tiene más que enviar un mensaje a 
+la lista iris-ldap@listserv.rediris.es (antes tendrá que suscribirse a ella).
+
+Podéis encontrar más información en: http://www.rediris.es/ldap/doc/
+
+=============================================================================
+
+1. Migración de datos de X500 a LDAP 
+   1.1 Herramienta ldapsearch ........................... JM
+   1.2 Caracteres nacionales (ñ y acentos) ¿Cómo 
+       escribir un DN correctamente? .................... AL
+   1.3 Clases y atributos más notables    ............... AL
+   1.4 Controles de acceso a las entradas en OpenLDAP ... JM
+   1.5 De los nombres X.521 a los atributos dc .......... DL
+   
+2. Instalación y configuración de:
+   2.1 openldap 2.0.7 ................................... AL
+   2.2 netscape o iplanet ............................... EB
+   2.3 sasl y openssl ................................... FS + JD
+   2.4 web500gw ......................................... AL
+   2.5 web2ldap ......................................... ???
+
+3. Otros
+   3.1 Autenticación mediante LDAP ...................... AL
+   3.2 Roaming .......................................... AL
+   3.3 Inclusión de certificados ........................ AL + CM
+   3.4 Inclusión de fotografías ......................... AL
+   3.5 Esquemas ......................................... ???
+   3.6 Clientes LDAP (GQ, Eudora, Outlook) .............. ???
+
+=============================================================================
+
+
+1. Migración de datos de X500 a LDAP 
+
+
+=============================================================================
+
+1.1 Herramienta ldapsearch
+
+Esta herramienta está incluida en el software openldap y es la que vamos a 
+usar para migrar los datos que tenemos en el servidor X.500 al nuevo servidor 
+LDAP. Para ello realizaremos un paso intermedio volcando la información que 
+mantenemos en nuestro directorio a un fichero en formato LDIF.
+
+El comando ldapsearch incluido en la versión 2.0.7 de OpenLDAP tiene esta 
+sintaxis:
+
+ ldapsearch [opciones] [filtros [atributos_a_recuperar]]
+
+Algunas de las opciones más interesantes son:
+
+ -b DN       DN base desde donde se realiza la búsqueda
+ -D DN       DN del usuario con el que nos autenticamos
+ -h host     host del servidor LDAP
+ -p puerto   puerto del servidor LDAP
+ -P versión  versión del protocolo (por defecto la 3)
+ -w clave    clave para una autenticación simple
+ -x          autenticación simple
+ 
+La forma más habitual de ejecutar el comando ldapsearch será de la siguiente 
+forma:
+
+ ldapsearch -h host -p puerto -b base > fichero.ldif
+
+Por ejemplo:
+
+ ldapsearch -h ldap.rediris.es -p 389 -b dc=rediris,dc=es > rediris.ldif
+
+Si tenemos denegado el acceso de lectura a algunos atributos/entradas 
+tendremos que realizar esta consulta como usuario autorizado:
+
+ ldapsearch -h host -p puerto -b base -D DN -w clave > fichero.ldif
+
+Habrá que usar la opción "-x" si la conexión que realizamos no se hace por 
+defecto con un modo de autorización simple y obtenemos un error de este tipo:
+
+ ldap_sasl_interactive_bind_s: Operation error
+
+Habrá que usar la opción "-P 2" para conectarnos con un servidor X.500 que 
+tenga la pasarela LDAP de la Universidad de Michigan ya que esta pasarela 
+soporta LDAPv2 y ldapsearch por defecto se conecta con LDAPv3. El error que 
+obtendríamos sería:
+
+ ldap_bind: Protocol error
+         additional info: Version not supported
+
+El comando para traernos todos los datos del servidor será entonces:
+
+ ldapsearch -x -P 2 -h host -p puerto -b base -D DN -w clave > fichero.ldif
+
+El fichero LDIF que obtendremos como resultado traerá muchos atributos usados 
+en X.500 que no vamos a necesitar como:
+
+objectClass: pilotObject
+objectClass: quipuObject
+objectClass: quipuNonLeafObject
+lastModifiedTime: 991020143653Z
+lastModifiedBy: cn=Directory Manager, c=ES
+acl:: Z3JvdXAgIyBjPUVTQG89Q0lDQUBjbj1EaXJlY3RvcnkgTWFuYWdlciAjIHdyaXRlICMgY2hp
+ XRlICMgZGVmYXVsdAphY2w9IHNlbGYgIyB3cml0ZSAjIGRlZmF1bHQKYWNsPSBvdGhlcnMgIyByZW
+masterDSA: cn=ocelot, c=ES
+iattr:: b3JnYW5pemF0aW9uYWxQZXJzb24gJCBERUZBVUxUICgKcG9zdGFsQWRkcmVzcz0KdGVsZX
+ gJCBERUZBVUxUICgKcXRlICMgZGVmYXVsdAphY2w9IHNlbGYgIyB3cml0ZSAjIGRlZmF1bHQKYWNs
+ 
+Para evitar tener que eliminar estas líneas no deseadas de nuestro fichero 
+LDIF podemos especificar los atributos que queremos traernos del Directorio 
+especificándolos al final del comando. Por ejemplo, si queremos traernos 
+nombre, apellidos, mail, password, dirección postal y teléfono, y eliminar 
+las 3 líneas de objectclass anteriores tendríamos que hacer algo así:
+
+ldapsearch -x -P 2 -h host -p puerto -b base -D DN -w clave cn sn objectclass \
+mail userpassword postaladdress telephonenumber | grep -v pilotObject | \
+grep -v quipuObject | grep -v quipuNonLeafObject > fichero.ldif
+
+Una vez obtenido este fichero ya tenemos un backup de todo lo que teníamos en 
+el servidor X.500 y con unas leves modificaciones podremos volcarlo al nuevo 
+servidor LDAP.
+
+Referencias:
+
+The OpenLDAP Project. Manual LDAPSEARCH(1)
+G. Good. The LDAP Data Interchange Format (LDIF) - Technical Specification. 
+RFC 2849
+T. Howes. The String Representation of LDAP Search Filters. RFC 2254
+
+=============================================================================
+
+1.2 Caracteres nacionales (ñ y acentos). ¿Cómo escribir un DN correctamente?
+
+Como sabemos, el Directorio es un servicio internacional. Aparte de la
+comunidad hispana puede ser utilizado por otras culturas que no disponen
+de la letra eñe y los acentos. En consecuencia, debemos cuidar el formato de
+las entradas en el Directorio para que sean de utilidad a cualquier usuario
+independientemente del idioma y teclado que utilice.
+
+Por contra, el idioma predominante en Internet y en sus aplicaciones es el
+inglés (baste como ejemplo el servicio DNS, donde no disponemos de caracteres
+acentuados o eñe). Esta circunstancia dificulta muchas veces la inclusión
+de caracteres castellanos.
+
+Teniendo presente las premisas anteriores, el proceso con una entrada es:
+
+1 - el dn (distinguishedName) debe estar en ASCII (el código ASCII puro es
+    de 128 caractéres). Para conseguirlo seguimos estos criterios:
+
+    - cambiamos una vocal acentuada por la misma vocal no acentuada
+    - sustituimos la letra ñ por ny
+    - transformamos la letra ü en u
+
+2 - todos los atributos se escriben con caracteres Latin-1 siguiendo la
+    gramática del castellano o de la lengua oficial de la respectiva
+    Comunidad Autónoma (pensemos en nombres y direcciones).
+
+3 - los atributos más usuales de búsqueda como o (organizationName),
+    ou (organizationalUnitName), cn (commonName) y sn (surname) si contienen
+    acentos o las letras ü, ñ se duplican en formato ASCII (como se indica
+    en el punto 1).
+
+4 - opcionalmente los atributos distintos al dn, o, ou, cn y sn se pueden
+    repetir en inglés (anglomanía ;). Por supuesto podemos duplicarlos en
+    otras lenguas oficiales de las Comunidades Autónomas.
+
+Un ejemplo de entrada en formato LDIF puede ser:
+
+dn: cn=Begonya Lajarin Carreter, dc=Nominas, dc=Entidad Publica, dc=ES
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Begoña Lajarín Carreter
+cn: Begonya Lajarin Carreter
+sn: Lajarín Carreter
+sn: Lajarin Carreter
+o: Entidad Pública
+o: Entidad Publica
+ou: Nóminas
+ou: Nominas
+title: Analista de la Sección de Nóminas
+title: Analyst of the Payroll Section
+description: Directora de la Sección de Nóminas
+description: Directory of the Payroll Section
+labeledURI: http://www.entidad.es/nominas P&aacute;gina de la Secci&oacute;n de
+ N&oacute;minas
+mail: bego@entidad.es
+telephoneNumber: +34 91 444 5588
+fax: +34 91 444 5567
+businessCategory: Analista
+businessCategory: Analyst
+postalAddress: Edificio Buenavista $ Avenida América, 57 $ Madrid $ SPAIN
+postalCode: 30120
+street: Avenida América, 57
+preferredLanguage: es
+
+Vamos a analizar en detalle este objeto. Para empezar, el DN se compone de:
+
+dc=Nominas, dc=Entidad Publica, dc=ES - apreciamos que la unidad organizativa
+como la organización no incluyen caracteres Latin-1.
+
+cn=Begonya Lajarin Carreter - aquí sustituimos la letra ñ por ny y la í por i.
+
+Al estar el DN en ASCII, si se devuelve un referral, éste siempre será en
+formato ASCII y puede ser reconocido por cualquier cliente LDAP.
+
+El nombre completo (atributo cn) incluye caracteres no ASCII (una eñe y una
+vocal acentuada), por eso se repite en formato ASCII. Los apellidos
+(atributo sn) también incluyen una vocal acentuada y lógicamente se repite
+sin acentuar. Estas dos líneas asociadas al atributo sn facilitan dos formas
+de búsqueda:
+
+ldap://ldap.entidad.es:389/o=Entidad%20Publica,c=ES??sub?(sn=Lajarin%20Carreter)
+ldap://ldap.entidad.es:389/o=Entidad%20Publica,c=ES??sub?(sn=Lajarín%20Carreter)
+
+Tanto por el apellido con o sin acentos obtenemos la persona buscada. Lo mismo
+sucede para los atributos o (organizationName) y ou (organizationalUnit).
+
+Los atributos title, description, businessCategory, postalAddress y street
+se escriben en castellano. También la entidad ha decidido ponerlos en
+inglés a excepción de los atributos postalAddress y street (podemos obtener
+direcciones incorrectas si "anglosajonizamos" en exceso). Es de señalar
+la última parte del atributo postalAddress: SPAIN. Figura en inglés para
+facilitar el intercambio internacional.
+
+Los atributos telephoneNumber y fax (facsimileTelephoneNumber) deben
+seguir el formato especificado en el RFC 1617:
+
+Formato: "+" <código del país> <número nacional> ["x" <extensión>]
+Ejemplo: +34 91 444 5588
+
+El atributo labeledURI no permite caracteres Latin-1 tras la URL. Una
+alternativa para permitir vocales acentuadas, la letra ñ y la letra ü es
+utilizar las secuencias de escape del lenguaje HTML (&aacute; para á,
+&eacute; para é, &iacute; para í, &oacute; para ó, &uacute; para ú,
+&ntilde; para ñ y &uuml; para ü). Esta solución es válida en Netscape pero
+no funciona en otros clientes LDAP como MS Explorer, web500gw, web2ldap y GQ.
+
+Por último se ha añadido el atributo preferredLanguage para indicar a la
+persona interesada en los datos de Begoña que el idioma preferido para
+comunicarse es el español.
+
+Hasta este punto se ha comentado el formato de la entrada antes de insertarla
+en el Directorio. Si la entrada correspondiente a Begoña se incluye tal y como
+hemos indicado no se verá correctamente desde cualquier cliente LDAP. 
+
+Para conseguir una visualización correcta de los caracteres Latin-1 una
+alternativa es transformarlos al código Unicode empleando el algoritmo UTF-8.
+Los servidores LDAP de Netscape y OpenLDAP admiten caracteres UTF-8.
+
+Para convertir los caracteres Latin-1 del ISO 8859-1 a caracteres UTF-8
+empleamos este programa en C:
+
+/* Read Latin-1 (ISO-8859-1) characters from stdin, convert them
+   to UTF-8, and write the converted characters to stdout.
+   UTF-8 is defined by RFC 2279.
+   http://www.openldap.org/lists/openldap-general/199811/msg00031.html
+*/
+#include <errno.h>
+#include <stdio.h>
+
+int main (int argc, char** argv)
+{
+   register int c;
+   while ((c = getchar()) != EOF) {
+      if ((c & 0x80) == 0) {
+         putchar (c);
+      } else {
+         putchar (0xC0 | (0x03 & (c >> 6)));
+         putchar (0x80 | (0x3F & c));
+      }
+   }
+   if ( ! feof (stdin)) {
+      errno = ferror (stdin);
+      perror (argv[0]);
+   }
+   return 0;
+}
+
+Si este programa se encuentra en el fichero utf8.c lo podemos compilar
+tecleando
+
+gcc -o utf8 utf8.c
+
+Ahora suponemos que tenemos la entrada referente a Begoña en el fichero
+bego.ldif. Los pasos serían:
+
+1 - pasarla a formato UTF-8
+
+utf8 < bego.ldif > bego.utf8.ldif
+
+2 - insertarla en el Directorio
+
+ldapadd -D "cn=LDAP Manager, dc=Entidad Publica, dc=ES" -W -h ldap.entidad.es
+-p 389 -f bego.utf8.ldif
+
+Debemos tener en cuenta que nuestro cliente LDAP debe soportar los caracteres
+UTF-8 para una visualización correcta de los atributos.
+
+Finalmente una reflexión. El RFC 2596 denominado "Use of Language Codes in
+LDAP"
+propone emplear atributo;lang-<código del lenguaje>. Podríamos pensar en
+poner el atributo sin opción alguna en castellano, esto quedaría patente con
+la declaración "preferredLanguage: es". En tanto que podemos añadir otros
+atributo;lang-<código del lenguaje> para cada uno de los idiomas alternativos.
+Un ejemplo sería:
+
+description: analista de sistemas
+description;lang-en: system analyst
+
+Referencias:
+
+P. Barker, S. Kille, T. Lenggenhager. Naming and Structuring Guidelines for
+X.500 Directory Pilots. RFC 1617.
+F. Yergeau. UTF-8, a transformation format of Unicode and ISO 10646. RFC 2044.
+M. Smith. Definition of an X.500 Attribute Type and an Object Class to Hold
+Uniform Resource Identifiers (URIs). RFC 2079.
+M. Wahl, T. Howes, S. Kille. Lightweight Directory Access Protocol (v3). RFC
+2251.
+M. Wahl, S. Kille, T. Howes. Lightweight Directory Access Protocol (v3): UTF-8
+String Representation of Distinguished Names. RFC 2253.
+T. Howes, M. Smith. The LDAP URL Format. RFC 2255.
+A. Grimstad, R. Huber, S. Sataluri, M. Wahl. Naming Plan for Internet
+Directory-Enabled Applications. RFC 2377.
+M. Wahl, T. Howes. Use of Language Codes in LDAP. RFC 2596.
+M. Smith. Definition of the inetOrgPerson LDAP Object Class. RFC 2798.
+G. Good. The LDAP Data Interchange Format (LDIF) - Technical Specification. RFC
+2849.
+
+
+=============================================================================
+
+1.3 Clases y atributos más notables.
+
+Cuando vamos a introducir un objeto en el Directorio especificamos las
+clases a las que pertenece. Cada clase permite una serie de atributos.
+Vamos a ver las clases y atributos más importantes según tipo de objeto.
+
+Si deseamos incluir un objeto que representa a una organización obviamente
+incluimos las clases top y organization. La clase organization permite, entre
+otros, los atributos: businessCategory, telephoneNumber, fax, postalAddress,
+postalCode, street, st (stateOrProvinceName) y description. Si la organización
+tiene asignado un dominio en el DNS podemos especificarlo con la clase 
+domainRelatedObject y el atributo associatedDomain. El subdominio queda 
+especificado con la clase dcobject y su atributo dc (domainComponent). 
+Si también dispone de una página web añadimos la clase labeledURIObject y en 
+el atributo labeledURI incluimos la URL de la organización. Vemos un ejemplo:
+
+dn: dc=entidad, dc=es
+objectclass: top
+objectclass: organization
+objectclass: domainRelatedObject
+objectclass: dcobject
+objectclass: labeledURIObject
+o: Entidad Pública
+o: Entidad Publica
+businessCategory: Docencia e Investigación
+businessCategory: Teaching and Research
+telephoneNumber: +34 91 444 5566
+fax: +34 91 444 5567
+postalAddress: Edificio Buenavista $ Avenida América, 57 $ Madrid $ SPAIN
+postalCode: 30120
+street: Avenida América, 57
+st: Madrid
+description: Universidad de Nuevas Tecnologias
+description: University of New Technologies
+associatedDomain: entidad.es
+dc: entidad
+labeledURI: http://www.entidad.es P&aacute;gina de la Universidad de Nuevas
+ Tecnolog&iacute;as
+
+En este ejemplo se han seguido los criterios propuestos en el apartado
+precedente:
+
+- el atributo dn (distinguishedName) está en ASCII y si se puede, ponemos en
+  cada componente dc dominios. Así tenemos dc=es (dominio es) y dc=entidad
+  (dominio DNS asignado a esta organización).
+- el atributo o (organization) aparece en castellano y también en inglés
+- el atributo businessCategory aparece en castellano y también en inglés
+- el atributo telephoneNumber sigue el apartado 4.4.7 del RFC 1617
+- el atributo fax (facsimileTelephoneNumber) sigue el apartado 4.4.7 del RFC
+1617
+- el atributo postalAddress está en castellano a excepción del país
+- el atributo postalCode contiene caracteres alfanuméricos en ASCII
+- el atributo street está en castellano
+- el atributo st (stateOrProvinceName) figura en castellano
+- el atributo description se duplica en castellano e inglés 
+- el atributo labeledURI se describe en castellano
+
+Si el objeto es una unidad organizativa la entrada en formato LDIF es similiar
+a la de una organización. Si dicho Departamento o Servicio no gestiona un
+subdominio DNS de la organización podemos eliminar la clase domainRelatedObject
+y el atributo associatedDomain. Análogo razonamiento se aplica a la clase
+dcobject y su atributo dc. Un ejemplo de unidad organizativa que no tiene
+un dominio DNS (por eso figura ou en el DN y no dc) sería:
+
+dn: ou=Nominas, dc=entidad, c=es
+objectclass: top
+objectclass: organizationalUnit
+objectclass: domainRelatedObject
+objectclass: labeledURIObject
+o: Nominas
+o: Nóminas
+businessCategory: Seccion de Nóminas
+businessCategory: Payroll Section
+telephoneNumber: +34 91 444 5666
+fax: +34 91 444 5667
+postalAddress: Edificio Buenavista $ Avenida América, 57 $ Madrid $ SPAIN
+postalCode: 30120
+street: Avenida América, 57
+st: Madrid - SPAIN
+description: Seccion de Nóminas
+description: Payroll Section
+labeledURI: http://www.entidad.es/nominas P&aacute;gina de la Secci&oacute;n de
+ N&oacute;minas
+
+Si la entrada representa una persona debemos incluir la clase person pues
+permite, entre otros, los atributos: cn (commonName), sn (surname),
+telephoneNumber y description. También es interesante la subclase de person
+denominada organizationalPerson pues permite los atributos title,
+postalAddress, postalCode, street, ou (organizationalUnit) y st 
+(stateOrProvinceName).
+
+La subclase de la clase organizationalPerson llamada inetOrgPerson amplia 
+los atributos, siendo los mas destacables
+businessCategory, jpegPhoto, labeledURI, mail (rfc822Mailbox), mobile,
+o (organizationName), uid (userid), userCertificate y preferredLanguage.
+
+Concretando, las clases obligatorias para cualquier objeto asociado a una
+persona son: person, organizationalPerson e inetOrgPerson. Un ejemplo
+de entrada en formato LDIF se vió en el apartado anterior.
+
+Por supuesto podemos añadir más clases con sus respectivos atributos a
+las tres clases obligatorias. Una puede ser newPilotPerson con los
+atributos favouriteDrink y userClass. En el caso de una Universidad
+podemos asignar al atributo userClass los valores PAS (Personal de
+Administración y Servicios), PDI (Personal Docente e Investigador) o
+ALUMNO para hacer una búsqueda selectiva en la comunidad universitaria.
+
+Si vamos a autenticar usuarios UNIX mediante PAM (Pluggable Authentication
+Modules) y LDAP debemos añadir la clase posixAccount y como mínimo los
+atributos uid (userid), userPassword, uidNumber, gidNumber, gecos,
+homeDirectory y loginShell. Para el ejemplo de Begoña quedaría así:
+
+dn: cn=Begonya Lajarin Carreter, ou=Nominas, dc=entidad, dc=es
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+objectclass: posixAccount
+cn: Begoña Lajarín Carreter
+cn: Begonya Lajarin Carreter
+sn: Lajarín Carreter
+sn: Lajarín Carreter
+o: Entidad Pública
+o: Entidad Publica
+ou: Nóminas
+ou: Nominas
+title: Analista de la Sección de Nóminas
+title: Analyst of the Payroll Section
+description: Directora de la Sección de Nóminas
+description: Directory of the Payroll Section
+labeledURI: http://www.entidad.es/nominas P&aacute;gina de la Secci&oacute;n de
+ N&oacute;minas
+mail: bego@entidad.es
+telephoneNumber: +34 91 444 5588
+fax: +34 91 444 5567
+businessCategory: Analista
+businessCategory: Analyst
+postalAddress: Edificio Buenavista $ Avenida América, 57 $ Madrid $ SPAIN
+postalCode: 30120
+street: Avenida América, 57
+preferredLanguage: es
+uid: bego
+userPassword: {crypt}V479CQrvyweWQ
+uidNumber: 500
+gidNumber: 100
+gecos: Begoña Lajarín Carreter
+homeDirectory: /home/bego
+loginShell: /bin/bash
+
+Referencias:
+
+P. Barker, S. Kille. The COSINE and Internet X.500 Schema. RFC 1274.
+P. Barker, S. Kille, T. Lenggenhager. Naming and Structuring Guidelines for
+X.500 Directory Pilots. RFC 1617.
+M. Wahl. A Summary of the X.500(96) User Schema for use with LDAPv3. RFC 2256.
+L. Howard. An Approach for Using LDAP as a Network Information Service. RFC
+2307.
+A. Grimstad, R. Huber, S. Sataluri, M. Wahl. Naming Plan for Internet
+Directory-Enabled Applications. RFC 2377.
+M. Smith. Definition of the inetOrgPerson LDAP Object Class. RFC 2798.
+G. Good. The LDAP Data Interchange Format (LDIF) - Technical Specification. RFC
+2849.
+
+=============================================================================
+
+1.4 Controles de acceso a las entradas en openLDAP
+
+Recordemos que en el servidor de directorio IC-R3.1 los controles de acceso 
+se especificaban en cada una de las entradas mediante el atributo acl, bien 
+escribiéndolos en la misma entrada o mediante ACLs heredados. En OpenLDAP la 
+gestión de los controles de acceso a las entradas se realiza de una forma 
+diferente. Todos ellos se encuentran en el fichero de configuración del 
+servidor. Se especifican mediante una sintaxis de este tipo:
+
+ access to <what> [by <who> <access> <control>]+
+
+ --------  ---------------------------------------------------------
+ selector  descripción
+ --------  ---------------------------------------------------------
+ <what>    Selecciona las entradas y/o atributos a los que se les va 
+           a aplicar la regla de control de acceso
+ <who>     Selecciona las entidades que tienen acceso
+ <access>  Especifica el tipo de acceso
+ --------  ---------------------------------------------------------
+
+Una descripción completa de las expresiones <what> <who>, <access> y 
+<control> puede encontrarse en la documentación de OpenLDAP.
+
+ http://www.OpenLDAP.org/doc/admin/slapdconfig.html#Access Control
+
+Aquí vamos a mostrar una descripción de algunos de estos 
+selectores y daremos unos ejemplos básicos de control de acceso para 
+nuestras entradas.
+
+1.4.1 <what> - A qué se controla el acceso
+
+Este control se puede realizar de dos formas, mediante una expresión 
+regular del tipo dn=<regexp> o mediante un filtro aplicado a alguno 
+de los atributos mediante filter=<filtroLDAP> donde <filtroLDAP> es 
+un filtro de búsqueda LDAP definido en el RFC 2254
+
+Podemos controlar el acceso a nivel de atributos. Para ello los atributos 
+de una entrada pueden ser seleccionados incluyendolos en una lista separados 
+por comas de esta forma:
+
+ attrs=<atributo1, atributo2>
+
+El acceso a la entrada puede permitirse o denegarse usando un nombre 
+especial de atributo llamado "entry". Debemos tener en cuenta que para dar 
+acceso a un atributo en especial hay que dar acceso tambien a la entrada 
+mediante "entry".
+
+Por último, si queremos seleccionar cualquier entrada podemos usar "*".
+
+1.4.2 <who> - Quién tiene acceso a la entrada
+
+El acceso se da a entidades no a entradas. Las posibles entidades son:
+
+ --------------  -----------------------------------------------------
+ entidad         descripción
+ --------------  -----------------------------------------------------
+ *               Todas, incluyendo anonymous y usuarios autenticados
+ anonymous       Usuarios no autenticados
+ users           Usuarios autenticados
+ self            El usuario asociado a la entrada
+ dn=<regex>      Los usuarios que cumplan con la expresión regular
+ --------------  -----------------------------------------------------
+
+1.4.3 <access> - Cual es el tipo de acceso
+
+Los diferentes tipos de acceso son:
+
+ -------  ------  ----------------------------------------------------
+ Nivel    Privil. Descripción
+ -------  ------  ----------------------------------------------------
+ none             no se da acceso
+ auth          x  necesitado para hacer bind
+ compare      cx  necesitado para hacer comparaciones
+ search      scx  necesitado para aplicar filtros de búsqueda
+ read       rscx  necesitado para leer los resultados de una búsqueda
+ write     wrscx  necesitado para modificar o renombrar
+ -------  ------  ----------------------------------------------------
+
+Cada nivel engloba a los anteriores
+
+1.4.4 Mecanismo de evaluación
+
+Es importante conocer el mecanismo que openldap usa para la evaluación del 
+control de acceso. Podemos volvernos locos con las líneas del fichero de 
+configuración slapd.conf si no conocemos como se hace la evaluación.
+
+1. Cuando openldap está evaluando si una petición tiene acceso a una 
+   entrada/atributo el proceso slapd compara la entrada y/o los atributos 
+   con el selector <what> obtenido del fichero de configuración. 
+   Primero se miran las directivas locales a la base de datos actual y
+   luego las directivas de acceso global (como readonly). Dentro de esta 
+   prioridad las directivas de acceso son examinadas en el orden en el que 
+   aparecen en el fichero de configuración. Slapd se para en el primer 
+   selector <what> que cuadra con la entrada y/o atributo. Esa directiva de 
+   acceso es la única que slapd usará para evaluar el acceso.
+
+2. Luego, slapd compara el selector <who> con la entidad que pretende acceder 
+   en el orden en el que aparece. Se parará en el primer selector que cumpla 
+   la petición.
+
+3. Finalmente, slapd compara el tipo de acceso del selector <access> con la 
+   petición de acceso del cliente. Si el nivel de acceso es mayor o igual al 
+   de la entrada, se permitirá el acceso. En otro caso será denegado.
+
+
+1.4.5 Ejemplos
+
+        access to * by * read
+
+Da acceso de lectura a todas las entradas a todo el mundo.
+
+        access to *
+                by self write
+                by * read
+
+Se permite que los usuarios puedan modificar sus propias entradas y que todo 
+el mundo pueda leerlas.
+
+        access to dn=".*,dc=ejemplo,dc=es"
+                by * search
+        access to dn=".*,dc=es"
+                by * read
+
+Se permite el acceso de lectura a las entradas bajo dc=es excepto a aquellas 
+entradas bajo dc=ejemplo,dc=es a las que solo se pueden realizar búsquedas. 
+Si se cambiasen las dos directivas de orden todas las entradas bajo dc=es 
+tendrían acceso de lectura ya que nunca se evaluaría la directiva 
+"dc=ejemplo,dc=es" puesto que estaría englobada dentro de "dc=es".
+
+        access to dn="(.*,)?dc=ejemplo,dc=es" attr=homePhone
+                by self write
+                by dn="(.*,)?dc=ejemplo,dc=es" search
+                by domain=.*\.rediris\.es read
+        access to dn="(.*,)?dc=ejemplo,dc=es"
+                by self write
+                by dn=".*,dc=ejemplo,dc=es" search
+                by anonymous auth
+
+Cualquier entrada por debajo de dc=ejemplo,dc=es puede modificar sus datos, 
+tambien puede buscar las entradas bajo ese subárbol. Las demás entradas no 
+tienen acceso a esas datos salvo para autenticación. El atributo homePhone 
+solo puede ser buscado por entradas bajo dc=ejemplo,dc=es y consultado para 
+los usuarios que se conecten desde el dominio rediris.es
+
+        access to dn="dc=([^,]+),dc=ejemplo,dc=es"
+                attrs=userPassword
+                by dn="uid=manager,dc=$1,dc=ejemplo,dc=es" write
+                by * compare
+        access to dn="dc=([^,]+),dc=ejemplo,dc=es"
+                by dn="uid=manager,dc=$1,dc=ejemplo,dc=es" write
+                by domain=.*\.ejemplo\.es read
+
+Cualquier entrada bajo dc=*,dc=ejemplo,dc=es puede ser consultada desde 
+dentro del dominio .ejemplo.es y la entrada uid=manager de cada una de esas 
+áreas puede escribir en las entradas de su área. El atributo userPassword de 
+una entrada sólo puede ser consultado por el manager del área correspondiente. 
+
+
+Referencias:
+
+OpenLDAP 2.0 Administrator's Guide: The slapd Configuration File. 
+http://www.OpenLDAP.org/doc/admin/slapdconfig.html#Access Control
+T. Howes. The String Representation of LDAP Search Filters. RFC 2254
+ 
+=============================================================================
+
+1.5 De los nombres X.521 a los atributos dc
+
+El Directorio (las normas originales de X.500) estaba
+orientado a producir una version electrónica de las guías de teléfonos,
+especialmente para su uso por parte de los sistemas de correo electrónico
+X.400. Por tanto, las aplicaciones directas que se preveían entonces para
+el Directorio eran de tres tipos:
+
+a) Aplicaciones que permitieran "navegar" (puesto entre comillas porque ese
+   término se asocia ahora con la Web y entonces ni se planteaba que fuera
+   a existir) por la estructura de la guía y encontrar una entrada de acuerdo
+   con su localización en el árbol.
+
+b) Aplicaciones que permitieran realizar búsquedas en el Directorio de acuerdo
+   con determinados valores de ciertos atributos.
+
+c) Aplicaciones orientadas a sistemas, como podría ser el "enrutamiento
+   automático" del correo electronico. Si esto resulta sorprendente,
+   coviene tener en cuenta que estamos hablando de correo X.400, en el
+   que las rutas se asignaban manualmente de acuerdo con una "jerarquía".
+   En esencia, era almacenar algo parecido a los registros MX del DNS dentro
+   del Directorio.
+
+El pretendido uso de páginas blancas, el que X.500 fuera un complemento
+de X.400 y el que estas recomendaciones provengan del CCITT en la época en
+que en cada país había una sola Telefónica (que solía ser el Estado, de
+una u otra forma) dio lugar al esquema de nombres que se conoce como X.521
+(el que se ha hecho usual, con c=, o=,...), basado en
+una raiz mundial, que asignaba servidores principales por país (los de cada
+Telefónica), que a su vez asignaba servidores por organización (los "abonados"
+de cada Telefónica), etc. El Directorio comenzó a usarse con otros objetivos
+y/o en otros entornos y el uso hizo que el esquema de nombres basados en
+X.521 se asociara con la forma "natural" de nombrar objetos en el Directorio.
+Pero no hay que olvidar que esto no es así. La ruta para alcanzar un objeto
+en el Directorio no tiene por qué estar asociada en ningún sentido con
+estructuras organizativas, ni por paises.
+
+Siguiendo con el repaso historico, la aparición de LDAP como alternativa
+de acceso menos pesada que el viejo DAP y la capacidad de almacenamiento
+y búsqueda que ofrece el modelo orientado a objetos del Directorio hicieron
+atractivo su uso para otros fines, como almacenamiento de configuraciones,
+definición de politicas de red, etc. Otro punto importante fue que protocolos
+de seguridad como SSL y S/MIME incluyeran certificados X.509 para su
+funcionamiento, lo que hace que los DN del Directorio cobren importancia y que
+el sistema en sí aparezca como el mecanismo natural para alamacenar y gestionar
+estos certificados. 
+
+En paralelo, DNS y la estructura de dominios Internet se ha convertido en el
+estándar de hecho (y, en la práctica, de derecho) para identificar 
+electrónicamente a entidades en la Red. El divorcio que existía entre los
+nombres de dominio y otros tipos de identidades electrónicas se ha ido
+disolviendo paulatinamente a favor de los primeros. Esto ha sido así salvo en
+el caso del Directorio, al menos hasta ahora.
+
+Desde hace algun tiempo disponemos de los atributos dc= para definir una
+entrada en el Directorio y la propuesta que hacemos aquí es usar de manera
+prácticamente única estos atributos para nombrar entradas en el Directorio,
+de forma que reconciliemos de una vez la ultima "zona de divorcio" entre
+el sistema de dominios Internet y cualquier identidad electrónica.
+
+
+1.5.1 Estructura de un DN basado en componentes de dominio
+
+En la práctica, esto que venimos discutiendo debe plasmarse en que cualquier
+identidad electrónica pueda expresarse (en terminos de usuario) de una de dos
+maneras:
+
+   componente.componente.componente (a la manera de un nombre DNS)
+   usuario@componente.componente    (a la manera de una direccion de correo)
+
+Es importante notar que usamos el término "a la manera de", sin requerir
+que coincidan necesariamente. Así, por ejemplo, el rectorado de la Universidad
+de La Rioja podría identificarse como "rectorado.unirioja.es"
+(dc=rectorado,dc=unirioja,dc=es) y el Rector de la Universidad de Córdoba como
+"rector@uco.es" (dc=es,dc=uco,uid=rector). En último término, estos nombres
+llevan tanta información como sus equivalentes X.521 y mantienen una
+correspondencia directa con la estructura de dominios.
+
+Por supuesto, puede objetarse que DNs X.521 al estilo de "C=es,O=Universidad de
+Cordoba,OU=Dpto. de Fisiologia Animal,CN=Joaquin Alvarez" contienen
+mucha más información que DNs como "dc=es,dc=uco,uid=jalv0567". Pero conviene
+tener en cuenta que si es necesario saber algo más sobre esa entrada, basta
+con ir al servidor LDAP correspondiente (claramente identificado por los 
+componentes "dc=" que aparecen en el DN) y acceder a sus atributos OU=,
+CN= y (por ejemplo, para saber si es un profesor, etc) BusinessCategory= o
+Role=
+
+En esta cuestión de "ir al servidor LDAP correspondiente" es donde el empleo
+de los dc= cobra su importancia esencial. Usando este esquema es enormente
+simple localizar el servidor LDAP que corresponde con una entrada determinada.
+Supongamos el siguiente escenario: la Universidad de Córdoba y la de La Rioja
+firman un acuerdo por el cual los alumnos del "Master en Enología" de la
+primera pueden acceder a unas bases de datos sobre cepas de levaduras que
+tiene la segunda. Cuando alguien de la Universidad de Córdoba quiere acceder
+a esas bases de datos se conecta y envía (supongamos) un certificado que
+autentifica que es "dc=es, dc=uco, uid=alme5341". Al servidor de La Rioja
+le resulta sumamente fácil conectarse al DNS, detectar el servidor LDAP
+correspondiente a la entrada y verificar si tiene el atributo adecuado
+que lo acredita como alumno del master. Si el certificado tiene la
+identidad "c=es, o=universidad de cordoba, ou=facultad de biologia, cn=..."
+la detección del servidor LDAP es más problemática.
+
+Cierto es que el mismo certificado enviado podría contener la condición
+de alumno del master, pero en ese caso es mucho mas complicada
+la gestión: ¿Cuántos certificados debe tener una persona? ¿Cómo se
+gestionan las emisiones, revocaciones, etc cuando hablamos de un
+certificado para cada posible atribución? Y esto si se usan certificados.
+Si se usan tecnologías más ligeras para garantizar la movilidad del
+usuario, como PAPI (http://www.rediris.es/app/papi/) o Shibboleth
+(http://middleware.internet2.edu/shibboleth/), donde el usuario debe ser
+capaz de identificarse a sí mismo, es mucho más fácil que se identifique
+como "alme5341@uco.es" que "c=es, o=universidad de cordoba, ou=facultad de
+biologia, cn=..."
+
+Nuestra recomendación es, en definitiva, usar componentes dc= para nombrar
+cualquier entidad de la red que se corresponda "grosso modo" con un
+servidor/dominio en la red y usar un conjunto muy reducido de otros
+atributos para entidades que correspondan a "algo dentro de un servidor".
+Una lista (no exhaustiva) de estos atributos es:
+
+    uid= para personas y/o entes personalizables.
+    o=   para organizaciones asociadas al dominio en cuestion (que no
+         dispongan de dominio propio).
+    ou=  para grupos asociados con unidades de la organizacion (que no
+         dispongan de dominio propio).
+
+De esta manera, se simplifica el uso del Directorio
+para lo que debe ser su objetivo fundamental: almacenar información para
+que las aplicaciones verifiquen propiedades sobre entidades electrónicas
+en la Red.
+
+1.5.2 Servicios de búsqueda y navegación
+
+Con esta estructura de nombres, los servicios de búsqueda pueden
+prestarse por medio de servidores de índice. RedIRIS lleva tiempo
+usando un software llamado LIMS que permite indexar los contenidos de
+determinadas entradas de servidores LDAP y hacer referrals hacia ellos.
+En la nueva estructura, este servicio debe constituir el nuevo índice del
+Directorio de la Red Académica Española.
+
+En cuanto a los servicios de navegación, cada organización puede
+ofrecer a través de la Web un directorio (nótese que aquí usamos las
+minúsculas), basado en LDAP o en otra base de datos. Si el directorio
+está basado en LDAP, no debe constituir problema alguno que el interface
+ofrezca, al primer nivel, una lista de los objetos de clase
+"OrganizationalUnit" que contenga el servidor LDAP. Pinchando en uno de ellos
+se accede a los objetos de clase "Person" (o de la clase correspondiente)
+que tengan en su atributo ou= (o donde sea) el departamento seleccionado.
+Es obvio que este esquema puede generalizarse para más niveles o para
+otras clases de objetos.
+
+
+=============================================================================
+
+
+2. Instalación y configuración
+
+
+=============================================================================
+
+2.1 OpenLDAP 2.0.7
+
+El proyecto OpenLDAP ofrece a la comunidad Internet un servidor
+LDAP gratuito basado en los estándares (RFCs) del Directorio. Este grupo
+de personas han recogido la versión LDAP 3.3 abandonada por la Universidad de
+Michigan y la han mejorado notablemente. Así, OpenLDAP
+tiene dos versiones disponibles, una denominada 1.x y otra 2.x. En este
+apartado nos centramos en la segunda y más concretamente en la versión 2.0.7.
+
+OpenLDAP 2.0.7 incluye estas características:
+
+- Servidor de Directorio (slapd) y un servidor para la replicación (slurpd).
+
+- Una pasarela WHOIS++ a LDAP (whois++d).
+
+- Soporta LDAPv3 (RFCs 2251-2256). Esto significa que cuando el servidor
+  LDAP consultado no tiene la entrada solicitada devuelve al cliente una
+  referencia a otro servidor donde quizá se encuentre el dato. Un ejemplo
+  de referencia es:
+
+  ldap://host.dominio.es:1389/dc=dominio,dc=es
+
+- Permite etiquetas para soporte multilingüe (RFC 2596). Esta característica
+  posibilita añadir a cualquier atributo la opción ;lang-<código del lenguaje>
+  informando del idioma en el cual está escrito el atributo. Un ejemplo es:
+
+  cn;lang-es: Begoña Lajarín Carreter
+  cn;lang-en: Begonya Lajarin Carreter
+
+- Admite ficheros LDIFv1 (RFC 2849). Este formato permite comentarios,
+  caracteres codificados en base64 o UTF-8, referencias a ficheros externos,
+  gestión de entradas (eliminación, modificación y cambio de ubicación en
+  el DIT), etiquetas de idioma y controles. Un ejemplo de fichero en formato
+  LDIFv1 es:
+
+  version: 1
+  # Add a new entry
+  dn: cn=Pepe Romero Gomez, dc=Entidad, dc=ES
+  changetype: add
+  objectclass: top
+  objectclass: person
+  objectclass: organizationalPerson
+  objectclass: inetOrgPerson
+  cn;lang-es: Pepe Romero Gómez
+  cn;lang-en: Pepe Romero Gomez
+  sn;lang-es: Romero Gómez
+  sn;lang-en: Romero Gomez
+  mail: pepe@entidad.es
+  description;lang-es: jefe
+  description;lang-en: chief
+  jpegphoto:< file:///fotos/pepe.jpg
+
+  # Modify an entry
+  dn: cn=Pepe Romero Gomez, dc=Entidad, dc=ES
+  changetype: modify
+  add: telephonenumber
+  telephonenumber: +34 91 444 5588
+  -
+
+- Mayor seguridad en las comunicaciones al permitir SASL (RFC 2829),
+  TLS (RFC 2830) y SSL. Con SASL (Simple Authentication and Security Layer)
+  conseguimos un método de autenticación. Con TLS (Transport Layer
+  Security) y SSL (Secure Socket Layer) ciframos la comunicación.
+
+- Inclusión de nuevos esquemas. Tras la instalación de OpenLDAP 2.0.7
+  en el directorio schema tenemos los esquemas tradicionales (core.schema,
+  cosine.schema, inetorgperson.schema) y otros nuevos (corba.schema,
+  java.schema, krb5-kdc.schema, nis.schema). La definición de esquemas 
+  es distinta entre OpenLDAP 1.x y 2.x. En la versión 1.x es más
+  informal mientras que en la versión 2.x se atiene a la sintaxis del
+  RFC 2252.
+
+- Localización de servicios LDAP mediante registros SRV en el DNS
+  (experimental). OpenLDAP implementa el draft para un posible RFC.
+  Si suponemos que en el servidor DNS tenemos esta entrada:
+
+  _ldap._tcp.entidad.es  IN  SRV  0  0  1389  ldap.entidad.es
+
+  los clientes LDAP pueden descubrir el servidor de Directorio
+  consultando al DNS, construyendo el siguiente LDAP URL (Uniform
+  Resource Locator):
+
+  ldap://ldap.entidad.es:1389/dc=entidad,dc=es
+  
+- Inclusión de entradas del tipo referencia para apuntar a servicios
+  LDAP u otros. Para aquellas personas que conozcan X.500 podemos
+  verlo como las referencias de conocimiento descritas en la recomendación
+  X.518. Un ejemplo sería:
+
+  dn: dc=entidad, dc=es
+  objectclass: referral
+  objectclass: extensibleObject
+  o: Entidad
+  ref: ldap//host.entidad.es/dc=entidad,dc=es     Host
+
+Para compilar y configurar OpenLDAP 2.0.7 disponemos de una guía:
+
+http://www.openldap.org/doc/admin/
+
+Si deseamos una mayor seguridad para nuestro servidor LDAP antes de compilar
+OpenLDAP 2.0.7 debemos instalar previamente OpenSSL, Kerberos y SASL. Las
+opciones más notables cuando ejecutamos el script configure son:
+
+--prefix=/usr             directorio de instalación
+--libexecdir=/usr/sbin    directorio para los servidores
+--localstatedir=/var/run  donde se guarda el pid asociado al servicio
+--sysconfdir=/etc         directorio para los ficheros de configuración
+--enable-referrals        para incluir entradas del tipo referencia
+--with-cyrus-sasl         para soporte SASL
+--with-kerberos           para soporte Kerberos
+--with-tls                para soporte TLS/SSL
+--enable-wrappers         control mediante TCP Wrappers
+--enable-spasswd          necesario para PAM-LDAP.
+--enable-syslog           para gestión de logs
+--enable-debug            facilita los chequeos al servicio
+--enable-dnssrv           búsqueda de servidores LDAP en el DNS
+--enable-slurpd           si vamos a replicar nuestro servidor
+
+Una vez compilado e instalado OpenLDAP 2.0.7 podemos configurarlo de forma
+muy básica siguiendo las indicaciones de la guía disponible en:
+
+http://www.um.es/~linux/ldap/openldap-2.0.7/
+
+Es importante que aparezcan estas líneas en el fichero /etc/openldap/slapd.conf
+
+include   /etc/openldap/schema/core.schema
+include   /etc/openldap/schema/cosine.schema
+include   /etc/openldap/schema/inetorgperson.schema
+
+esto permite a los objetos asociados a personas disponer de las tres clases
+obligatorias: person, organizationalPerson e inetOrgPerson.
+
+También es muy importante el servidor por defecto al cual redirigimos los
+clientes cuando el objeto interrogado no está en el servidor LDAP. Si suponemos
+que tenemos esta estructura:
+
+                ldap.rediris.es
+                    dc=es
+                    /   \
+                   /     \
+                  /       \
+         ldap.doma.es    ldap.domb.es
+         dc=doma,dc=es   dc=domb,dc=es
+
+y nuestra organización gestiona el contexto "dc=doma,dc=es" pondremos como
+servidor para las referencias en el fichero /etc/openldap/slapd.conf el
+inmediatamente superior:
+
+referral   ldap://ldap.rediris.es
+
+También podemos añadir una entrada del tipo referencia para ahorrar tiempo
+y recursos ante una consulta por el contexto "dc=domb,dc=es":
+
+dn: dc=domb, dc=es
+objectclass: top
+objectclass: referral
+objectclass: extensibleObject
+dc: domb
+ref: ldap://ldap.domb.es/dc=domb,dc=es
+
+Otra flexibilidad de OpenLDAP es la posibilidad de disponer de múltiples
+base de datos. Esta característica posibilita a una organización disponer de
+los contextos "o=entidad, c=es" y "dc=entidad, dc=es". Para conseguirlo
+basta poner esto en el fichero /etc/openldap/slapd.conf:
+
+# Base de Datos para el esquema basado en el RFC 2377
+database        ldbm
+suffix          "dc=entidad, dc=es"
+rootdn          "cn=root, dc=entidad, dc=es"
+rootpw          clave
+directory       /etc/openldap/dc
+
+# Base de Datos para el esquema basado en la recomendación X.521
+database        ldbm
+suffix          "o=entidad, c=es"
+rootdn          "cn=root, o=entidad, c=es"
+rootpw          clave
+directory       /etc/openldap/x500
+
+Tampoco debemos olvidarnos de la posibilidad de incluir caracteres de
+cualquier alfabeto gracias a la codificación de los atributos en formato
+UTF-8. Esto requiere que previamente los datos introducidos (normalmente
+mediante un fichero LDIF) estén en formato UTF-8.
+
+Referencias:
+
+M. Wahl, T. Howes, S. Kille. Lightweight Directory Access Protocol (v3). RFC
+2251.
+M. Wahl, A. Coulbeck, T. Howes, S. Kille. Lightweight Directory Access Protocol
+(v3): Attribute Syntax Definitions. RFC 2252.
+M. Wahl, S. Kille, T. Howes. Lightweight Directory Access Protocol (v3): UTF-8
+String Representation of Distinguished Names. RFC 2253.
+T. Howes. The String Representation of LDAP Search Filters. RFC 2254.
+T. Howes, M. Smith. The LDAP URL Format. RFC 2255.
+M. Wahl. A Summary of the X.500(96) User Schema for use with LDAPv3. RFC 2256.
+M. Wahl, T. Howes. Use of Language Codes in LDAP. RFC 2596.
+M. Wahl, H. Alvestrand, J. Hodges, R. Morgan. Authentication Methods for LDAP.
+RFC 2829.
+J. Hodges, R. Morgan, M. Wahl. Lightweight Directory Access Protocol (v3):
+Extension for Transport Layer Security. RFC 2830.
+G. Good. The LDAP Data Interchange Format (LDIF) - Technical Specification. RFC
+2849.
+Michael P. Armijo, Levon Esibov, Paul Leach, R.L. Morgan. Discovering LDAP
+Services with DNS. INTERNET-DRAFT.
+Kurt D. Zeilenga. Named References in LDAP Directories. INTERNET-DRAFT.
+The OpenLDAP Project. The OpenLDAP Administrator's Guide.
+http://www.openldap.org/doc/admin/
+
+
+=============================================================================
+
+2.2 Netscape/iPlanet
+
+    VAMOS A QUITARLO DE AQUI
+
+=============================================================================
+
+2.3 SASL y SSL/TLS
+
+    A LA ESPERA DE QUE FELIX ME LO ENVIE
+  
+=============================================================================
+
+2.4 web500gw
+
+El programa web500gw es una pasarela web para accesos al Directorio. Mediante
+el ratón podemos movernos por la estructura del Directorio y podemos hacer
+búsquedas sencillas o avanzadas rellenando el campo correspondiente.
+
+Web500gw ha sido creado por Frank Richter y la última versión disponible
+es la 2.1b3 de fecha 28 de Octubre de 1998. Esta versión soporta LDAPv2,
+pero no LDAPv3. Esta carencia, sumada a la falta de mantenimiento de esta
+utilidad inducen a a pensar en otras alternativas (como web2ldap).
+
+Teniendo en mente que una solución basada en web500gw nos sirve de forma
+local para accesos al servidor LDAP de nuestra organización pero no para
+movernos por el DIT (Directory Information Tree) pues no devuelve referencias
+(referrals) al cliente necesarias para el seguimiento de la consulta.
+
+La versión 2.1b3 permite interfaces en distintos idiomas como inglés,
+alemán, francés y castellano (traducido por Javier Masa de RedIRIS). Todo
+depende del idioma soportado por el cliente web. Esto unido a que es
+fácil de configurar y podemos conseguir una interfaz web impactante
+permiten dar un voto de confianza temporal a esta pasarela.
+
+El proceso de compilación y configuración de web500gw es sencillo y está
+bien documentado en la página de Frank Richter:
+
+http://www.tu-chemnitz.de/web500gw/
+
+Antes de compilar web500gw debemos tener las librerías LDAP y un demonio que
+atienda peticiones LDAP en nuestro servidor de Directorio. Las posibilidades
+son OpenLDAP, Umich LDAP 3.3 e Isode.
+
+Existe una guía disponible para Umich LDAP 3.3 e Isode en la dirección:
+
+http://www.um.es/si/x500/isode4/web500gw.html
+
+En el caso de OpenLDAP, dependiendo de la versión (1.x ó 2.x) el proceso
+es distinto. Si disponemos de OpenLDAP 1.x la compilación de web500gw es
+sencilla siguiendo las instrucciones del fichero INSTALL. El proceso se
+puede ver en la página:
+
+http://www.um.es/~linux/ldap/web500gw/
+
+Si tenemos OpenLDAP 2.x debemos parchear web500gw v2.1b3 siguiendo las
+directrices de Jim Dutton y Eduardo Bergasa (Universidad de La Rioja).
+Jim Dutton corrige el problema del año 2000 y añade las definiciones
+necesarias para compilar con la versión 2.x de OpenLDAP. Por su parte
+Eduardo Bergasa añade el tratamiento de caracteres en formato UTF-8.
+Por supuesto, existe una URL (Uniform Resource Locator) donde se detalla
+todo el proceso:
+
+http://www.um.es/~linux/ldap/openldap-2.0.7/
+
+Referencias:
+
+W. Yeong, T. Howes, S. Kille. Lightweight Directory Access Protocol. RFC 1777.
+M. Wahl, T. Howes, S. Kille. Lightweight Directory Access Protocol (v3). RFC
+2251.
+Frank Richter. Web500gw's home page. http://www.tu-chemnitz.de/web500gw/
+
+
+=============================================================================
+
+2.5 web2ldap
+
+    DESPUES DE VARIOS MAILS CON EL AUTOR NO VAMOS A PONERLO EN ESTA
+    PRIMERA VERSION DEL GUIABURROS
+
+=============================================================================
+
+
+3. Otros
+
+
+=============================================================================
+
+3.1 Autenticación mediante LDAP
+
+El proceso de acceso a un sistema UNIX (login) básico contrasta el
+identificador y clave aportada con una entrada en el fichero /etc/passwd
+(o bien los ficheros /etc/passwd y /etc/shadow en sistemas de nivel C2).
+Otra posibilidad es utilizar Network Information Service (NIS) para
+autenticar de forma distribuida (cuentas en un servidor y accesos en distintos
+clientes).
+
+Estas dos posibilidades se pueden ampliar mediante Pluggable Authentication
+Modules (PAM). Con PAM es posible utilizar diferentes mecanismos de
+autenticación (RSA, Kerberos, tarjetas inteligentes, etc.) y aunar los
+distintos mecanismos de acceso. Gracias a la flexibilidad de PAM podemos
+disponer de un nuevo módulo que realice consultas LDAP a un servidor
+donde tenemos la información de acceso al sistema. Por tanto no es
+descabellado pensar en una solución PAM+LDAP como alternativa a NIS.
+
+En el RFC 2307 (An Approach for Using LDAP as a Network Information Service)
+se hace un estudio de las clases y atributos necesarios para el proceso
+de autenticación. La clase que nos interesa es posixAccount y sus atributos
+cn, description, uid, userPassword, uidNumber, gidNumber, gecos, homeDirectory,
+loginShell. De este modo la entrada tradicional
+
+usuario:OjyIkYgWld4dk:500:100:Juan Puche Pi:/home/usuario:/bin/bash
+
+tendría esta pinta en formato LDIF
+
+uid: usuario
+userPassword: {crypt}OjyIkYgWld4dk
+uidNumber: 500
+gidNumber: 100
+gecos: Juan Puche Pi
+homeDirectory: /home/usuario
+loginShell: /bin/bash
+
+Veamos los pasos necesarios para implementar el proceso de autenticación
+PAM+LDAP. Para empezar necesitamos el módulo PAM y las APIs correspondientes.
+Para Solaris debemos conseguir los ficheros fuente y compilarlos. En el caso
+de Linux pueden venir disponibles en alguna distribución. Así, en RedHat 6.2
+son los paquetes:
+
+pam-0.72-6.i386.rpm
+nss_ldap-105-1.i386.rpm
+auth_ldap-1.4.0-2.i386.rpm
+
+Se pueden instalar y configurar siguiendo la guía de RedHat:
+
+http://www.europe.redhat.com/documentation/rhl6.2/ref-guide-es/s1-ldap-redhattips.php3
+
+Ahora nos queda la parte del Directorio. Si disponemos de OpenLDAP 1.x
+podemos seguir la guía "Configuración de autentificación mediante LDAP"
+disponible en la dirección:
+
+http://www.um.es/~linux/ldap/pam_ldap/index.html
+
+Pero si tenemos OpenLDAP 2.x el proceso es distinto. Para empezar,
+el esquema detallado en el RFC 2307 lo tenemos en el fichero 
+/etc/openldap/schema/nis.schema. Para disponer de dicho esquema basta
+tener al principio del fichero /etc/openldap/slapd.conf esta línea
+
+include /etc/openldap/schema/nis.schema
+
+En este punto debemos plantearnos las clases de objetos y la forma del
+DN asociados a una entrada en el Directorio. Como se ha comentado en
+otro apartado, las clases obligatorias son person, organizationalPerson
+e inetOrgPerson. A estas tres añadimos posixAccount respetando el
+DN y teniendo en cuenta que la cuenta corresponde al atributo uid.
+Un ejemplo en formato LDIF puede ser:
+
+dn: cn=Juan Puche Pi, dc=ida, dc=es
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Juan Puche Pi
+sn: Puche Pi
+o: Instituto del Agua
+ou: Trasvases
+title: Licenciado
+description: Director en funciones
+mail: juan@ida.es
+telephoneNumber: +34 91 544 3598
+fax: +34 91 544 3597
+businessCategory: Director Trasvases
+postalAddress: Edificio Mejorvista $ Avenida Venezuela, 57 $ Madrid $ SPAIN
+postalCode: 30120
+street: Avenida Venezuela, 57
+preferredLanguage: es
+uid: usuario
+userPassword: {crypt}OjyIkYgWld4dk
+uidNumber: 500
+gidNumber: 100
+gecos: Juan Puche Pi
+homeDirectory: /home/usuario
+loginShell: /bin/bash
+
+Otra posibilidad de autenticación para clientes NT es utilizar Samba y LDAP.
+Los detalles se indican en el documento "Samba-PDC LDAP howto" de Ignacio
+Coupeau
+
+http://www.unav.es/cti/ldap-smb/ldap-smb-HEAD-howto.html
+
+En el Grupo de Trabajo Docencia-Net del GT-10 RedIRIS celebrado en Murcia
+Antonia Gómez González de la Facultad de Informática de la UPC presentó su
+experiencia en un sistema SSO (Single Sign-On) basado en el documento de
+Ignacio Coupeau y la utilización de PAM.
+
+Si se desea más información sobre compilación e instalación de OpenLDAP
+1.x junto con Samba para la solución propuesta por Ignacio Coupeau se
+puede visitar esta página
+
+http://www.um.es/~linux/ldap/samba
+
+Referencias:
+
+V. Samar, R. Schemers. Unified Login with Pluggable Authentication
+Modules (PAM). RFC 86.0.
+L. Howard. An Approach for Using LDAP as a Network Information Service. RFC
+2307.
+PADL Software Pty Ltd. PAM LDAP Module. http://www.padl.com/pam_ldap.html
+Ignacio Coupeau. Samba-PDC LDAP howto.
+http://www.unav.es/cti/ldap-smb/ldap-smb-HEAD-howto.html
+Netscape. Single Sign-On Deployment Guide.
+http://developer.netscape.com/docs/manuals/security/SSO/contents.htm
+Alfonso López Murcia. Página sobre configuración de autentificación mediante
+LDAP". http://www.um.es/~linux/ldap/pam_ldap/index.html
+
+=============================================================================
+
+3.2 Roaming
+
+Los usuarios que utilizan Netscape como cliente web pueden beneficiarse
+del acceso móvil. Esta facilidad permite guardar las preferencias de
+usuario, historial, marcadores (bookmarks), cookies y certificados
+en un servidor LDAP. De este modo, independientemente de la máquina
+utilizada, nuestro entorno es siempre el mismo.
+
+El proceso es sencillo: el usuario ejecuta su cliente Netscape,
+introduce la clave de acceso y recupera la información citada
+anteriormente del servidor LDAP (también podemo seleccionar cuales
+no se guardan en el Directorio). Al terminar la sesión web se
+guardan en el servidor los cambios producidos.
+
+Para el acceso móvil es necesario una nueva entrada en el servidor
+LDAP. Esta segunda entrada va a contener la información para el
+cliente Netscape mientras que la primera, correspondiente a la
+persona, debe tener la clave con la que accedemos al roaming.
+
+Como suponemos, debemos incluir nuevos objetos y atributos para
+soportar el acceso móvil. Obviamente, dependiendo de la versión de
+OpenLDAP utilizada, la definición del esquema cambia. Así, para la
+versión 1.x los detalles se especifican en la página:
+
+http://www.um.es/~linux/ldap/roaming/index.html
+
+Pero si tenemos OpenLDAP 2.x el proceso es distinto. Primero creamos
+un fichero /etc/openldap/schema/roaming.schema cuyo contenido se
+especifica en la dirección
+
+http://www.openldap.org/lists/openldap-devel/200010/msg00071.html
+
+y posteriormente se incorpora la esquema del servidor LDAP mediante
+esta otra línea en el fichero /etc/openldap/slapd.conf
+
+include /etc/openldap/schema/roaming.schema
+
+Veamos un ejemplo para un usuario móvil. Supongamos que tenemos
+
+dn: cn=Juan Puche Pi, dc=ida, dc=es
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Juan Puche Pi
+sn: Puche Pi
+userPassword: acceso
+o: Instituto del Agua
+ou: Trasvases
+title: Licenciado
+description: Director en funciones
+mail: juan@ida.es
+telephoneNumber: +34 91 544 3598
+fax: +34 91 544 3597
+businessCategory: Director Trasvases
+postalAddress: Edificio Mejorvista $ Avenida Venezuela, 57 $ Madrid $ SPAIN
+postalCode: 30120
+street: Avenida Venezuela, 57
+preferredLanguage: es
+
+Ahora nos falta la segunda entrada para esta persona asociada al acceso
+móvil. Suponemos que el administrador pone el roaming en una nueva unidad
+organizativa, con esto, la entrada en formato LDIF sería:
+
+dn: nsLIProfileName=Juan Puche Pi, ou=Roaming, dc=ida, dc=es
+objectclass: top
+objectclass: nsLIProfile
+owner: cn=Juan Puche Pi, dc=ida, dc=es
+
+Después esta persona debe activar el acceso móvil en su cliente web
+Netscape, para ello especifica:
+
+Nombre de usuario: Juan Puche Pi
+Servidor de Directorio LDAP
+Dirección: ldap://ldap.ida.es:1389/nsLIProfileName=$USERID, ou=Roaming, dc=ida,
+dc=es
+DN del usuario: $USERID, dc=ida, dc=es
+
+Seguidamente especifica qué elementos se guardan en el Directorio y termina
+la ejecución de Nescape. En la siguiente ejecución del cliente Netscape se
+pide la contraseña (acceso) y se trabaja normalmente. Cuando se termine
+se guardan los items especificados en el servidor LDAP para otro acceso
+itinerante.
+
+Referencias:
+
+Netscape. Manually Implementing Roaming Access.
+http://help.netscape.com/products/client/communicator/manual_roaming2.html
+Alfonso López Murcia. Página sobre configuración roaming con OpenLDAP.
+http://www.um.es/~linux/ldap/roaming/index.html
+
+=============================================================================
+
+3.3 Inclusión de certificados
+
+En la criptografía de clave pública cada usuario tiene un par de claves:
+una privada y otra pública. La clave pública se pone a disposición de
+otras personas. Para asociar de forma inequívoca la clave pública a una persona
+se emite un certificado por una autoridad de certificación
+(Certification Authority, CA). Este certificado incluye la clave pública
+firmada por la CA, dando veracidad a dicha clave. Finalmente el certificado
+se incluye en el Directorio para su consulta por otros miembros de la
+Public Key Infrastructure (PKI).
+
+El certificado de una persona se guarda en el atributo userCertificate. La
+clase inetOrgPerson incluye este atributo.
+
+Si utilizamos los clientes Netscape para recuperar los certificados del
+servidor LDAP debemos tener en cuenta su formato: Distinguished
+Encoding Rule (DER). Para comprender esto vamos a ver un ejemplo. Si
+utilizamos OpenSSL para generar certificados, todos están en formato
+Privacy Enhanced Mail (PEM). Para cambiarlos a formato DER indicamos
+
+openssl x509 -inform pem -outform der < certificado.pem > certificado.der
+
+Se pueden ver los detalles de instalación de OpenSSL en la dirección
+
+http://www.um.es/~linux/seguridad/openssl/index.html
+
+Otra circunstancia a tener en cuenta en el momento de especificar el
+atributo userCertificate en el fichero LDIF es añadir la opción binary.
+Con todo lo dicho hasta este momento un ejemplo puede ser:
+
+dn: cn=Juan Puche Pi, dc=ida, dc=es
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Juan Puche Pi
+sn: Puche Pi
+o: Instituto del Agua
+ou: Trasvases
+title: Licenciado
+description: Director en funciones
+mail: juan@ida.es
+telephoneNumber: +34 91 544 3598
+fax: +34 91 544 3597
+businessCategory: Director Trasvases
+postalAddress: Edificio Mejorvista $ Avenida Venezuela, 57 $ Madrid $ SPAIN
+postalCode: 30120
+street: Avenida Venezuela, 57
+userCertificate;binary:< file:///certificados/certificado.der
+preferredLanguage: es
+
+3.3.1 Generación de certificados haciendo uso del esquema de nombres 
+      basado en dc
+
+Para la generación de certificados que contengan el atributo dc 
+(domainComponent) en el DN será necesario seguir los pasos descritos en 
+http://www.um.es/~linux/seguridad/openssl/index.html, teniendo en cuenta 
+las siguientes consideraciones según la versión del OpenSSL que estemos 
+utilizando:
+
+* Si trabajamos con una versión posterior a la 0.9.6 del OpenSSL
+
+  Se deberá incluir en el fichero de configuración que se vaya a utilizar 
+  para la generación del certificado (generalmente el openssl.cnf) en la 
+  sección [req_distinguished_name] las siguientes líneas:
+
+	[req_distinguished_name]
+        0.domainComponent=es
+        1.domainComponent=rediris
+        commonName=www.rediris.es
+
+  Con esto obtendremos un certificado con DN: 
+  dc=es, dc=rediris, cn=www.rediris.es
+
+* Si trabajamos con una versión anterior a la 0.9.6 del OpenSSL
+
+  Las versiones anteriores a 0.9.6 no tienen definido el atributo dc por 
+  lo que será necesario definirlo para que el OpenSSL lo entienda. Para ello,
+  será suficiente con incluir en el fichero de configuración que vayamos a 
+  utilizar para la generación de certificados la línea 
+
+  oid_file=my_OID
+
+  Donde el archivo my_OID deberá contener el OID asignado al atributo así 
+  como el nommbre del mismo de la siguiente forma:
+
+  0.9.2342.19200300.100.1.25 DC domainComponent
+
+  Además especificaremos, de la misma forma que en el caso anterior, en la 
+  sección [req_distinguished_name], los valores que les vamos a asociar al 
+  los atributos dc y en este caso CN para el certificado a generar.
+
+  Ni que decir tiene que utilizaremos, en ambos caso, tantas líneas 
+  *.domainComponent como atributos dc queramos que aparezcan en el DN de 
+  nuestro certificado y que podremos utilizar los atributos estándares de la 
+  misma forma que en el caso del ejemplo hemos utilizado el atributo CN.
+
+  Así por ejemplo, si queremos un certificado con el siguiente DN: 
+
+  dc=es, dc=rediris, dc=iris-cert, dc=personal, 
+  UID=chelo/Email=chelo.malagon@rediris.es 
+
+  deberemos introducir las siguientes líneas en la sección 
+  [req_distinguished_name] del fichero de configuración openssl.cnf:
+
+	0.domainComponent=es
+	1.domainComponent=rediris
+	2.domainComponent=iris-cert
+	3.domainComponent=personal
+	UID=chelo
+	emailAddress_default=chelo.malagon@rediris.es
+
+Para ver el proceso completo de generación de certificados consultar:
+http://www.um.es/~linux/seguridad/openssl/index.html
+
+Referencias:
+
+M. Wahl, T. Howes, S. Kille. Lightweight Directory Access Protocol (v3). RFC
+2251.
+S. Boeyen, T. Howes, P. Richard. Internet X.509 Public Key Infrastructure
+Operational Protocols - LDAPv2. RFC 2559.
+S. Boeyen, T. Howes, P. Richard. Internet X.509 Public Key Infrastructure
+LDAPv2 Schema. RFC 2587.
+ISO/IEC. X.509: Authentication Framework.
+http://www.dante.net/np/ds/osi/9594-8-X.509.A4.ps
+Alfonso López Murcia. Página sobre OpenSSL.
+http://www.um.es/~linux/seguridad/openssl/index.html
+
+
+=============================================================================
+
+3.4 Inclusión de fotografías
+
+Si recordamos, las clases obligatorias de toda entrada correspondiente a
+una persona son person, organizationalPerson e inetOrgPerson. La clase
+inetOrgPerson dispone del atributo jpegPhoto. En consecuencia, si deseamos
+incluir una fotografía debemos tenerla en formato JPEG.
+
+Si Juan da su consentimiento para incluir una fotografía suya en el
+servidor LDAP podemos tener lo siguiente:
+
+dn: cn=Juan Puche Pi, dc=ida, dc=es
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Juan Puche Pi
+sn: Puche Pi
+o: Instituto del Agua
+ou: Trasvases
+title: Licenciado
+description: Director en funciones
+mail: juan@ida.es
+telephoneNumber: +34 91 544 3598
+fax: +34 91 544 3597
+businessCategory: Director Trasvases
+postalAddress: Edificio Mejorvista $ Avenida Venezuela, 57 $ Madrid $ SPAIN
+postalCode: 30120
+street: Avenida Venezuela, 57
+userCertificate;binary:< file:///certificados/certificado.der
+jpegphoto:< file:///fotos/juan.jpg
+preferredLanguage: es
+
+Referencias:
+
+P. Barker, S. Kille, T. Lenggenhager. Naming and Structuring Guidelines for
+X.500 Directory Pilots. RFC 1384.
+M. Smith. Definition of the inetOrgPerson LDAP Object Class. RFC 2798.
+G. Good. The LDAP Data Interchange Format (LDIF) - Technical Specification. RFC
+2849.
+
+=============================================================================
+
+3.5 Esquemas
+
+	POR AHORA NADA
+
+=============================================================================
+
+3.6 Clientes LDAP (GQ, Eudora, Outlook)
+
+	POR AHORA NADA
+
+=============================================================================
+Final de esta guía                                      Guiaburros de RedIRIS
+=============================================================================

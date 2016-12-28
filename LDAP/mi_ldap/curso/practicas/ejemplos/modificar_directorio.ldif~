@@ -1,0 +1,17 @@
+#13.1. Modificar el grupo administradores de la rama tecnico, de modo que el único administrador sea bartolome.cariasco
+
+cn=administradores,ou=grupos,ou=tecnico,dc=directorio,dc=com
+changetype: modify
+replace: uniqueMember
+uniqueMember: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+
+# 13.2. En la rama gerencia, mover al usuario alonso.alvarez del grupo directivos al de secretarios.
+cn=directivos,ou=grupos,ou=gerencia,dc=directorio,dc=com
+changetype: modify
+delete: uniqueMember
+uniqueMember: uid=alonso.alvarez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+
+cn=secretarios,ou=grupos,ou=gerencia,dc=directorio,dc=com
+changetype: modify
+add: uniqueMember
+uniqueMember: uid=alonso.alvarez,ou=usuarios,ou=gerencia,dc=directorio,dc=com

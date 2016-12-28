@@ -1,0 +1,10 @@
+#! /usr/bin/env python
+def purificar(lista):
+   purificar = []
+   if type(lista) == list:
+      for numero in lista:
+         if numero % 2 == 0:
+            purificar.append(numero)
+   return purificar 
+   
+print purificar([1,2,3])

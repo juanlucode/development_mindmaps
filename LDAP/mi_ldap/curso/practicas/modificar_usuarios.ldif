@@ -1,0 +1,74 @@
+# extended LDIF
+#
+# LDAPv3
+# base <dc=directorio,dc=com> with scope subtree
+# filter: (objectClass=inetOrgPerson)
+# requesting: dn 
+#
+
+# alonso.alvarez, usuarios, gerencia, directorio.com
+dn: uid=alonso.alvarez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# leonor.meneses, usuarios, gerencia, directorio.com
+dn: uid=leonor.meneses,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# juan.antolinez, usuarios, gerencia, directorio.com
+dn: uid=juan.antolinez,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# margarita.nelken, usuarios, gerencia, directorio.com
+dn: uid=margarita.nelken,ou=usuarios,ou=gerencia,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# gonzalo.argote, usuarios, comercial, directorio.com
+dn: uid=gonzalo.argote,ou=usuarios,ou=comercial,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# sofia.perez, usuarios, comercial, directorio.com
+dn: uid=sofia.perez,ou=usuarios,ou=comercial,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# benito.arias, usuarios, comercial, directorio.com
+dn: uid=benito.arias,ou=usuarios,ou=comercial,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# anamaria.matute, usuarios, comercial, directorio.com
+dn: uid=anamaria.matute,ou=usuarios,ou=comercial,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# luis.barahona, usuarios, tecnico, directorio.com
+dn: uid=luis.barahona,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# rosa.chacel, usuarios, tecnico, directorio.com
+dn: uid=rosa.chacel,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# bartolome.cairasco, usuarios, tecnico, directorio.com
+dn: uid=bartolome.cairasco,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# julia.asensi, usuarios, tecnico, directorio.com
+dn: uid=julia.asensi,ou=usuarios,ou=tecnico,dc=directorio,dc=com
+add: userPassword
+userPassword: {SSHA}p89ZqS84y1mBzZw0f9mHKFOuUHdc9h1v
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 13
+# numEntries: 12

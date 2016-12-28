@@ -1,0 +1,6 @@
+# Componente de dominio
+dn: dc=ldapconfig,dc=net
+objectClass: dcObject
+objectClass: organization
+dc: ldapconfig
+o: ldapconfig

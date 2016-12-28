@@ -1,0 +1,131 @@
+dn: uid=alonso.alvarez,ou=personas,ou=usuarios,ou=gerencia,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Alonso
+sn: Álvarez Soria
+displayName: Alonso Álvarez
+gidNumber: 1001
+homeDirectory: /home/alonso.alvarez
+uid: alonso.alvarez
+uidNumber: 10001
+
+dn: uid=leonor.meneses,ou=personas,ou=usuarios,ou=gerencia,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Leonor
+sn: Meneses Noronha
+displayName: Leonor Meneses
+gidNumber: 1001
+homeDirectory: /home/leonor.meneses
+uid: leonor.meneses
+uidNumber: 10002
+
+dn: uid=juan.antolinez,ou=personas,ou=usuarios,ou=gerencia,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Juan
+sn: Antolinez Burgos
+displayName:: Juan Antolinez
+gidNumber: 1001
+homeDirectory: /home/juan.antolinez
+uid: juan.antolinez
+uidNumber: 10003
+
+dn: uid=margarita.nelken,ou=personas,ou=usuarios,ou=gerencia,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Margarita
+sn: Nelken Mansberger
+displayName: Margarita Nelken
+gidNumber: 1001
+homeDirectory: /home/margarita.nelken
+uid: margarita.nelken
+uidNumber: 10004
+
+dn: uid=gonzalo.argote,ou=personas,ou=usuarios,ou=comercial,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Gonzalo
+sn: Argote Molina
+displayName: Gonzalo Argote
+gidNumber: 1001
+homeDirectory: /home/gonzalo.argote
+uid: gonzalo.argote
+uidNumber: 10005
+
+dn: uid=sofia.perez,ou=personas,ou=usuarios,ou=comercial,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Sofía
+sn: Pérez Casanova de Lutoslawski
+displayName: Sofía Pérez
+gidNumber: 1001
+homeDirectory: /home/sofia.perez
+uid: sofia.perez
+uidNumber: 10006
+
+dn: uid=benito.arias,ou=personas,ou=usuarios,ou=comercial,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Benito
+sn: Arias Montano
+displayName: Benito Arias
+gidNumber: 1001
+homeDirectory: /home/benito.arias
+uid: benito.arias
+uidNumber: 10007
+
+dn: uid=anamaria.matute,ou=personas,ou=usuarios,ou=comercial,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Ana María
+sn: Matute Ausejo
+displayName: Ana María Matute
+gidNumber: 1001
+homeDirectory: /home/anamaria.matute
+uid: anamaria.matute
+uidNumber: 10008
+
+dn: uid=luis.barahona,ou=personas,ou=usuarios,ou=tecnico,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Luis
+sn: Barahona Soto
+displayName: Luis Barahona
+gidNumber: 1001
+homeDirectory: /home/luis.barahona
+uid: luis.barahona
+uidNumber: 10009
+
+dn: uid=rosa.chacel,ou=personas,ou=usuarios,ou=tecnico,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Rosa
+sn: Chacel Arimon
+displayName: Rosa Chacel
+gidNumber: 1001
+homeDirectory: /home/rosa.chacel
+uid: rosa.chacel
+uidNumber: 10010
+
+dn: uid=bartolome.cairasco,ou=personas,ou=usuarios,ou=tecnico,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Bartolomé
+sn: Cairasco
+displayName: Bartolomé Cairasco
+gidNumber: 1001
+homeDirectory: /home/bartolome.cairasco
+uid: bartolome.cairasco
+uidNumber: 10011
+
+dn: uid=julia.asensi,ou=personas,ou=usuarios,ou=tecnico,dc=dominio,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Julia
+sn: de Asensi y Laiglesia
+displayName: Julia de Asensi
+gidNumber: 1001
+homeDirectory: /home/julia.asensi
+uid: julia.asensi
+uidNumber: 10012

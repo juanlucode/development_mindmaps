@@ -1,0 +1,16 @@
+#! /usr/bin/env python
+def media(lista):
+   media = 0.0
+   longitud = len(lista)
+   lista.sort()
+   print "lista ordenada: ", lista
+   if longitud % 2 == 0:
+      # Elementos pares
+      media = (lista[(longitud/2)]+lista[(longitud/2-1)])/2.0
+      print "sumo: ", longitud/2
+   else:
+      # Elementos impares
+      media = lista[longitud/2]   
+   return media
+   
+print media([7,3,1,4])

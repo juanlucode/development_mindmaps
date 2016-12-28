@@ -1,0 +1,203 @@
+# Departamento de Gerencia
+dn: ou=gerencia,dc=ldapconfig,dc=net
+objectClass: organizationalUnit
+ou: gerencia
+description: Departamento de Gerencia
+
+# Usuarios de Gerencia
+dn: ou=usuarios,ou=gerencia,dc=ldapconfig,dc=net
+objectClass: organizationalUnit
+ou: usuarios
+description: Usuarios de Gerencia
+
+dn: uid=juan.garcia,ou=usuarios,ou=gerencia,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Juan
+sn: Garcia Hernandez
+displayName: Juan Garcia
+gidNumber: 1001
+homeDirectory: /home/juan.garcia
+uid: juan.garcia
+uidNumber: 10001
+
+dn: uid=maria.jimenez,ou=usuarios,ou=gerencia,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Maria
+sn: Jimenez Martin
+displayName: Maria Jimenez
+gidNumber: 1001
+homeDirectory: /home/maria.jimenez
+uid: maria.jimenez
+uidNumber: 10002
+
+dn: uid=jose.gomez,ou=usuarios,ou=gerencia,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Jose
+sn: Gomez Diaz
+displayName: Jose Gomez
+gidNumber: 1001
+homeDirectory: /home/jose.gomez
+uid: jose.gomez
+uidNumber: 10003
+
+dn: uid=eva.martinez,ou=usuarios,ou=gerencia,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Eva
+sn: Martinez Moreno
+displayName: Eva Martinez
+gidNumber: 1001
+homeDirectory: /home/eva.martinez
+uid: eva.martinez
+uidNumber: 10004
+
+# Grupos de Gerencia
+dn: ou=grupos,ou=gerencia,dc=ldapconfig,dc=net
+objectClass: organizationalUnit
+ou: grupos
+description: Grupos de Gerencia
+
+dn: cn=directivos,ou=grupos,ou=gerencia,dc=ldapconfig,dc=net
+objectClass: groupOfUniqueNames
+cn: directivos
+uniqueMember: uid=juan.garcia,ou=usuarios,ou=gerencia,dc=ldapconfig,dc=net
+uniqueMember: uid=maria.jimenez,ou=usuarios,ou=gerencia,dc=ldapconfig,dc=net
+
+dn: cn=secretarios,ou=grupos,ou=gerencia,dc=ldapconfig,dc=net
+objectClass: groupOfUniqueNames
+cn: secretarios
+uniqueMember: uid=jose.gomez,ou=usuarios,ou=gerencia,dc=ldapconfig,dc=net
+uniqueMember: uid=eva.martinez,ou=usuarios,ou=gerencia,dc=ldapconfig,dc=net
+
+# Departamento Comercial
+dn: ou=comercial,dc=ldapconfig,dc=net
+objectClass: organizationalUnit
+ou: gerencia
+description: Departamento Comercial
+
+# Usuarios del Departamento Comercial
+dn: ou=usuarios,ou=comercial,dc=ldapconfig,dc=net
+objectClass: organizationalUnit
+ou: usuarios
+description: Usuarios del Departamento Comercial
+
+dn: uid=manuel.perez,ou=usuarios,ou=comercial,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Manuel
+sn: Perez Gutierrez
+displayName: Manuel Perez
+gidNumber: 1001
+homeDirectory: /home/manuel.perez
+uid: manuel.perez
+uidNumber: 10005
+
+dn: uid=ana.gonzalez,ou=usuarios,ou=comercial,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Ana
+sn: Gonzalez Munoz
+displayName: Ana Gonzalez
+gidNumber: 1001
+homeDirectory: /home/ana.gonzalez
+uid: ana.gonzalez
+uidNumber: 10006
+
+dn: uid=antonio.sanchez,ou=usuarios,ou=comercial,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Antonio
+sn: Sanchez Ortiz
+displayName: Antonio Sanchez
+gidNumber: 1001
+homeDirectory: /home/antonio.sanchez
+uid: antonio.sanchez
+uidNumber: 10007
+
+dn: uid=carmen.rodriguez,ou=usuarios,ou=comercial,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Carmen
+sn: Rodriguez Navarro
+displayName: Carmen Rodriguez
+gidNumber: 1001
+homeDirectory: /home/carmen.rodriguez
+uid: carmen.rodriguez
+uidNumber: 10008
+
+# Grupos del Departamento Comercial
+dn: ou=grupos,ou=comercial,dc=ldapconfig,dc=net
+objectClass: organizationalUnit
+ou: grupos
+description: Grupos del Departamento Comercial
+
+
+# Departamento Tecnico
+dn: ou=tecnico,dc=ldapconfig,dc=net
+objectClass: organizationalUnit
+ou: gerencia
+description: Departamento  Tecnico
+
+# Usuarios del Departamento  tecnico
+dn: ou=usuarios,ou=tecnico,dc=ldapconfig,dc=net
+objectClass: organizationalUnit
+ou: usuarios
+description: Usuarios del Departamento  Tecnico
+
+dn: uid=francisco.fernandez,ou=usuarios,ou=tecnico,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Francisco
+sn: Fernandez Blanco
+displayName: Francisco Fernandez
+gidNumber: 1001
+homeDirectory: /home/francisco.fernandez
+uid: francisco.fernandez
+uidNumber: 10009
+
+dn: uid=elena.ramirez,ou=usuarios,ou=tecnico,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Elena
+sn: Ramirez Torres
+displayName: Elena Ramirez
+gidNumber: 1001
+homeDirectory: /home/elena.ramirez
+uid: elena.ramirez
+uidNumber: 10010
+
+dn: uid=pedro.lopez,ou=usuarios,ou=tecnico,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Pedro
+sn: Lopez Alvarez
+displayName: Pedro Lopez
+gidNumber: 1001
+homeDirectory: /home/pedro.lopez
+uid: pedro.lopez
+uidNumber: 10011
+
+dn: uid=pilar.ruiz,ou=usuarios,ou=tecnico,dc=ldapconfig,dc=net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: Pilar
+sn: Ruiz Dominguez
+displayName: Pilar Ruiz
+gidNumber: 1001
+homeDirectory: /home/pilar.ruiz
+uid: pilar.ruiz
+uidNumber: 10012
+
+# Grupos del Departamento  Tecnico
+dn: ou=grupos,ou=tecnico,dc=ldapconfig,dc=net
+objectClass: organizationalUnit
+ou: grupos
+description: Grupos del Departamento  Tecnico
+
+dn: cn=administradores,ou=grupos,ou=tecnico,dc=ldapconfig,dc=net
+objectClass: groupOfUniqueNames
+cn: administradores
+uniqueMember: uid=pilar.ruiz,ou=usuarios,ou=tecnico,dc=ldapconfig,dc=net
