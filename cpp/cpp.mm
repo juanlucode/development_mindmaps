@@ -1,6 +1,6 @@
-<map version="freeplane 1.3.0">
+<map version="freeplane 1.5.9">
 <!--To view this file, download free mind mapping software Freeplane from http://freeplane.sourceforge.net -->
-<node ID="ID_1723255651" CREATED="1283093380553" MODIFIED="1482838639141"><richcontent TYPE="NODE">
+<node FOLDED="false" ID="ID_1723255651" CREATED="1283093380553" MODIFIED="1482838639141"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -12,24 +12,28 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <hook NAME="MapStyle">
+    <properties fit_to_viewport="false;"/>
 
 <map_styles>
-<stylenode LOCALIZED_TEXT="styles.root_node">
-<stylenode LOCALIZED_TEXT="styles.predefined" POSITION="right">
-<stylenode LOCALIZED_TEXT="default" MAX_WIDTH="600" COLOR="#000000" STYLE="as_parent">
+<stylenode LOCALIZED_TEXT="styles.root_node" STYLE="oval" UNIFORM_SHAPE="true" VGAP_QUANTITY="24.0 pt">
+<font SIZE="24"/>
+<stylenode LOCALIZED_TEXT="styles.predefined" POSITION="right" STYLE="bubble">
+<stylenode LOCALIZED_TEXT="default" MAX_WIDTH="600.0 px" COLOR="#ffff00" BACKGROUND_COLOR="#336600">
 <font NAME="SansSerif" SIZE="10" BOLD="false" ITALIC="false"/>
 </stylenode>
 <stylenode LOCALIZED_TEXT="defaultstyle.details"/>
+<stylenode LOCALIZED_TEXT="defaultstyle.attributes">
+<font SIZE="9"/>
+</stylenode>
 <stylenode LOCALIZED_TEXT="defaultstyle.note"/>
 <stylenode LOCALIZED_TEXT="defaultstyle.floating">
 <edge STYLE="hide_edge"/>
 <cloud COLOR="#f0f0f0" SHAPE="ROUND_RECT"/>
 </stylenode>
 </stylenode>
-<stylenode LOCALIZED_TEXT="styles.user-defined" POSITION="right">
+<stylenode LOCALIZED_TEXT="styles.user-defined" POSITION="right" STYLE="bubble">
 <stylenode LOCALIZED_TEXT="styles.topic" COLOR="#18898b" STYLE="fork">
 <font NAME="Liberation Sans" SIZE="10" BOLD="true"/>
 </stylenode>
@@ -46,7 +50,7 @@
 <icon BUILTIN="FreeplaneIcons32px/12Computer/Hardware/laptop"/>
 </stylenode>
 </stylenode>
-<stylenode LOCALIZED_TEXT="styles.AutomaticLayout" POSITION="right">
+<stylenode LOCALIZED_TEXT="styles.AutomaticLayout" POSITION="right" STYLE="bubble">
 <stylenode LOCALIZED_TEXT="AutomaticLayout.level.root" COLOR="#000000">
 <font SIZE="18"/>
 </stylenode>
@@ -66,8 +70,8 @@
 </stylenode>
 </map_styles>
 </hook>
-<hook NAME="AutomaticEdgeColor" COUNTER="2"/>
-<node POSITION="right" ID="ID_1993014288" CREATED="1482838254537" MODIFIED="1482838639140" HGAP="60" VSHIFT="-60"><richcontent TYPE="NODE">
+<hook NAME="AutomaticEdgeColor" COUNTER="2" RULE="ON_BRANCH_CREATION"/>
+<node POSITION="right" ID="ID_1993014288" CREATED="1482838254537" MODIFIED="1482838639140" HGAP_QUANTITY="60.0 px" VSHIFT_QUANTITY="-60.0 px"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -79,11 +83,10 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <edge COLOR="#ff0000"/>
 </node>
-<node POSITION="right" ID="ID_1954590083" CREATED="1482838586137" MODIFIED="1482847480850" HGAP="60" VSHIFT="-60"><richcontent TYPE="NODE">
+<node POSITION="right" ID="ID_1954590083" CREATED="1482838586137" MODIFIED="1482847480850" HGAP_QUANTITY="60.0 px" VSHIFT_QUANTITY="-60.0 px"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -95,10 +98,9 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <edge COLOR="#0000ff"/>
-<node ID="ID_530548278" CREATED="1482847440654" MODIFIED="1482848503570" HGAP="50" VSHIFT="-70"><richcontent TYPE="NODE">
+<node ID="ID_530548278" CREATED="1482847440654" MODIFIED="1482848503570" HGAP_QUANTITY="50.0 px" VSHIFT_QUANTITY="-70.0 px"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -110,7 +112,6 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <node ID="ID_1860024930" CREATED="1482847548609" MODIFIED="1482847912083"><richcontent TYPE="NODE">
 
@@ -124,7 +125,6 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <node TEXT="SIZE" ID="ID_1591945633" CREATED="1482847567096" MODIFIED="1482847595124">
 <node TEXT="short" STYLE_REF="codigo" ID="ID_1890162846" CREATED="1482847596032" MODIFIED="1482848760125"/>
@@ -147,13 +147,12 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <node TEXT="float" STYLE_REF="codigo" ID="ID_221681689" CREATED="1482847812972" MODIFIED="1482848760133"/>
 <node TEXT="double" STYLE_REF="codigo" ID="ID_9328048" CREATED="1482847816612" MODIFIED="1482848760134"/>
 <node TEXT="long double" STYLE_REF="codigo" ID="ID_1591231901" CREATED="1482847819012" MODIFIED="1482848760135"/>
 </node>
-<node ID="ID_1676315111" CREATED="1482848074536" MODIFIED="1482848387351" HGAP="40" VSHIFT="40"><richcontent TYPE="NODE">
+<node ID="ID_1676315111" CREATED="1482848074536" MODIFIED="1482848387351" HGAP_QUANTITY="40.0 px" VSHIFT_QUANTITY="40.0 px"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -165,7 +164,6 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <node ID="ID_223501972" CREATED="1482848175155" MODIFIED="1482848260600"><richcontent TYPE="NODE">
 
@@ -179,7 +177,6 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <richcontent TYPE="DETAILS">
 
@@ -193,13 +190,12 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <font BOLD="true"/>
 </node>
-<node TEXT="char[]" STYLE_REF="codigo" ID="ID_1307911825" CREATED="1482848236832" MODIFIED="1482848760136" VSHIFT="20"/>
+<node TEXT="char[]" STYLE_REF="codigo" ID="ID_1307911825" CREATED="1482848236832" MODIFIED="1482848760136" VSHIFT_QUANTITY="20.0 px"/>
 </node>
-<node ID="ID_1523775999" CREATED="1482848316740" MODIFIED="1482848384798" HGAP="30" VSHIFT="30"><richcontent TYPE="NODE">
+<node ID="ID_1523775999" CREATED="1482848316740" MODIFIED="1482848384798" HGAP_QUANTITY="30.0 px" VSHIFT_QUANTITY="30.0 px"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -211,11 +207,10 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 <node TEXT="bool" STYLE_REF="codigo" ID="ID_1416161895" CREATED="1482848396440" MODIFIED="1482848760138"/>
 </node>
-<node ID="ID_1589726867" CREATED="1482848499563" MODIFIED="1482848563762" HGAP="30" VSHIFT="70"><richcontent TYPE="NODE">
+<node ID="ID_1589726867" CREATED="1482848499563" MODIFIED="1482848563762" HGAP_QUANTITY="30.0 px" VSHIFT_QUANTITY="70.0 px"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -227,10 +222,9 @@
     </p>
   </body>
 </html>
-
 </richcontent>
-<node ID="ID_1771801177" CREATED="1482848583119" MODIFIED="1482848657181" COLOR="#ffff00" BACKGROUND_COLOR="#336600">
-<icon BUILTIN="FreeplaneIcons32px/12Computer/Hardware/laptop"/>
+<node STYLE_REF="codigo" ID="ID_1771801177" CREATED="1482848583119" MODIFIED="1483018027603">
+<icon BUILTIN="executable"/>
 <richcontent TYPE="NODE">
 
 <html>
@@ -243,7 +237,6 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 </node>
 </node>
